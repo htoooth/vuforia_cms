@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 {% block article_content %}
-        <h1>Connexion</h1>
-        {% if user.identifier %}
-            <h4>ログイン中です。</h4>
-            <h5>{{ user.identifier }}
-            <h2><a href="{% url "logout" %}">Logout</a></h2>
-        {% else %}
-            <form method="post" action="{{ login }}">
-                {% csrf_token %}
-                <table>
-                    {{ form.as_table }}
-                </table>
-                <input type="submit" class="button" value="Connection" />
-            </form>
-        {% endif %}
+    <h1>Vuforia CMS</h1>
+    {% if user.identifier %}
+        <h4>&lt;{{ user.identifier }}&gt;がログイン中です。</h4>
+        <h2><a href="{% url "logout" %}">Logout</a></h2>
+    {% else %}
+        <form method="post" action="{{ login }}">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+            <br />
+            <input type="submit" class="button" value="Connection" />
+        </form>
+    {% endif %}
 {% endblock article_content %}
