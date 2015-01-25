@@ -1,7 +1,8 @@
-/*
-h1 {
-    color: pink;
+body {
+    font-family: Osaka;
+    margin-left: 20px;
 }
+/*
 tr.important td {
     font-weight: bold;
     color: red;
