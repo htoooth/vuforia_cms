@@ -71,9 +71,9 @@ class AuthenticateTest(TestCase):
 
     def test_login_method(self):
         before1 = UserProfile.objects.get(id=1).last_login
-        self.client.post('/',
-                         {'identifier': IDENTIFIER_1,
-                          'password': USER_1_PASS}
+        self.client.post('/', {'user_id': 1,
+                               'acc_type_id': 1,
+                               'password': USER_1_PASS}
         )
         self.assertNotEqual(before1, UserProfile.objects.get(id=1).last_login)
 

@@ -8,9 +8,17 @@ from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser
 #     「Django Essentials」No.1396
 def login_view(request):
     if request.method == 'POST':
-        identifier = request.POST.get('identifier', None)
+        user_id = request.POST.get('user_id', None)
+        acc_type_id = request.POST.get('acc_type_id', None)
+        if acc_type_id == '1':
+            identifier = 'ad-' + str(user_id).zfill(8)
+        elif acc_type_id == '2':
+            identifier = 'ag-' + str(user_id).zfill(8)
+        elif acc_type_id == '3':
+            identifier = 'co-' + str(user_id).zfill(8)
         password = request.POST.get('password', None)
-        # フォームのバリデーション
+
+        # TODO: フォームのバリデーション
 
         # フォームの認証
         user = authenticate(identifier=identifier, password=password)
@@ -35,10 +43,10 @@ def logout_view(request):
 
 
 class UserProfileForm(forms.Form):
-    #user_id = forms.IntegerField(label="User ID")
-    #acc_type_id = forms.CharField(label="Account Type",
-    #                              choices=UserProfile.ACC_TYPE_CHOICES)
-    identifier = forms.CharField(label="アカウント")
+    user_id = forms.IntegerField(label="ユーザーID")
+    acc_type_id = forms.ChoiceField(label="アカウントタイプ",
+                                  choices=UserProfile.ACC_TYPE_CHOICES)
+    #identifier = forms.CharField(label="アカウント")
     password = forms.CharField(label="パスワード",
                                widget=forms.PasswordInput)
 
