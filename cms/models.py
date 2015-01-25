@@ -1,35 +1,131 @@
 from django.db import models
-from datetime import datetime, date
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, \
+                                       BaseUserManager
 from django.utils import timezone
+from datetime import datetime, date
 
-class CmsUser(models.Model):
+# カスタムUserモデルを定義する場合はこれも必要
+class UserProfileManager(BaseUserManager):
+    def create_user(self, acc_type_id, password=None):
+        # Django ドキュメントのサンプルを参考に。
+        if not acc_type_id:
+            raise ValueError('Users must have an account type ID')
+
+        user = self.model(acc_type_id=acc_type_id,)
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+
+    def create_superuser(self, acc_type_id, password):
+        user = self.create_user(acc_type_id=acc_type_id, password=password)
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
+
+
+class UserProfile(AbstractBaseUser):
     class Meta:
         verbose_name = 'ユーザー'
         verbose_name_plural = 'ユーザー'
         unique_together = ('acc_type_id', 'user_id')
 
     ACC_TYPE_CHOICES = (
-        (0, 'Admin'),
-        (1, 'Agency'),
-        (2, 'Company')
+        (1, 'Admin'),
+        (2, 'Agency'),
+        (3, 'Company')
     )
 
     # Attributes
-    user_id     = models.IntegerField('ユーザーID', )
-    acc_type_id = models.CharField('アカウントタイプID', max_length=2,
-                                   choices=ACC_TYPE_CHOICES)
-    pw          = models.CharField('ログインパスワード', max_length=10)
-    parent_admin_id     = models.IntegerField('親AdminID', default=0)
+    identifier = models.CharField('アカウントID', max_length=11,
+                                  unique=True)
+    user_id     = models.IntegerField('ユーザーID', null=True)
+    acc_type_id = models.SmallIntegerField('アカウントタイプID',
+                                           choices=ACC_TYPE_CHOICES)
+    # substitute password of User for this
+    #pw          = models.CharField('ログインパスワード', max_length=10)
+    parent_admin_id     = models.IntegerField('親AdminID', default=1)
     parent_agency_id    = models.IntegerField('親AgencyID', default=0)
     user_running    = models.SmallIntegerField('稼働フラグ', default=0)
     enterprise      = models.CharField('企業名', max_length=64)
     person          = models.CharField('担当者名', max_length=64)
     address         = models.CharField('住所', max_length=64)
-    mail_address    = models.EmailField('メールアドレス', )
+    email           = models.EmailField('メールアドレス', )
     phone_number    = models.CharField('電話番号', max_length=16)
     created_at  = models.DateTimeField('作成日', default=datetime.today(),
                                        editable=False)
-    updated_at  = models.DateTimeField('更新日', editable=False)
+    updated_at  = models.DateTimeField('更新日', editable=False, null=True)
+
+    USERNAME_FIELD = 'identifier'
+    REQUIRED_FIELDS = ['acc_type_id', 'enterprise', 'email']
+
+    objects = UserProfileManager()
+
+    def __str__(self):
+        return self.identifier
+
+    @property
+    def is_staff(self):
+        return self.is_admin
+
+    @property
+    def is_active(self):
+        return True
+
+    def save(self, *args, **kwargs):
+        self.updated_at = date.today()
+        if self.id: # アップデートの場合
+            super(UserProfile, self).save()
+        else:       # 新規登録の場合は、関連モデルも登録する。
+            if self.acc_type_id == 1:
+                user = AdminUser()
+                ACC_TYPE_PREFIX = 'ad-'
+            elif self.acc_type_id == 2:
+                user = AgencyUser()
+                ACC_TYPE_PREFIX = 'ag-'
+            elif self.acc_type_id == 3:
+                user = CompanyUser()
+                ACC_TYPE_PREFIX = 'co-'
+            user.save()
+            self.user_id = user.id
+            self.identifier = ACC_TYPE_PREFIX + str(self.user_id).zfill(8)
+            super(UserProfile, self).save()
+            user.user_profile_id=self.id
+            user.save()
+
+    def delete(self, **kwargs):
+        if self.acc_type_id == 1:
+            user = AdminUser.objects.get(id=self.user_id)
+        elif self.acc_type_id == 2:
+            user = AgencyUser.objects.get(id=self.user_id)
+        elif self.acc_type_id == 3:
+            user = CompanyUser.objects.get(id=self.user_id)
+        user.delete()
+        super(UserProfile, self).delete()
+
+
+# 各ユーザー種別でIDをインクリメントするために別テーブルを作る。
+# idアトリビュートがそのIDに当たり、
+# user_profile_idアトリビュートが、対応するUserProfileのIDに当たる。
+class AdminUser(models.Model):
+    # ForeignKeyだと、UserProfile.save()のオーバーライドがしにくかった。
+    #user_profile = models.ForeignKey(UserProfile, verbose_name="Admin")
+    user_profile_id = models.IntegerField("AdminID", unique=True, null=True)
+    def __str__(self):
+        return str(self.id)
+
+class AgencyUser(models.Model):
+    user_profile_id = models.IntegerField("AgencyID",
+                                          unique=True, null=True)
+    def __str__(self):
+        return str(self.id)
+
+class CompanyUser(models.Model):
+    user_profile_id = models.IntegerField("CompanyID",
+                                          unique=True, null=True)
+    def __str__(self):
+        return str(self.id)
 
 
 class Content(models.Model):

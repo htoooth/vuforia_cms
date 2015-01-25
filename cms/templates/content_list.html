@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title_html %}
+    マーカー一覧
+{% endblock title_html %}
+{% load static %}
+{% block head %}
+{% endblock head%}
+{% block h1 %}
+    マーカー一覧
+{% endblock h1 %}
+{% block article_content %}
+<table>
+    <tr>
+        <th>CID</th>
+        <th>契約番号</th>
+        <th>公開期間</th>
+        <th>タイトル</th>
+        <th>URL</th>
+    </tr>
+    {% if last_task %}
+    <tr>
+        <td><a href="{% url "task_detail" last_task.id %}">{{ last_task.title }}</a></td>
+        <td>{{ last_task.description|truncatechars:25 }}</td>
+        <td><a href="{% url "update_task" last_task.id %}">Edit</a></td>
+        <td><a href="{% url "task_detail" last_task.id %}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% for task in tasks_list %}
+    <tr id="task_{{ task.id }}">
+        <td><a href="{% url "task_detail" task.id %}">{{ task.title }}</a></td>
+        <td>{{ task.description|truncatechars:25 }}</td>
+        <td><a href="{% url "update_task" task.id%}">Edit</a></td>
+        <td><button onclick="javascript:task_delete({{ task.id }}, '{% url "task_delete    _ajax" %}');">Delete</button></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock article_content %}
