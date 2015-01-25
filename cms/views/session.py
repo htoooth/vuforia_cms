@@ -17,7 +17,9 @@ def login_view(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return HttpResponse("ログイン成功" + "\n" + identifier)
+                #return render(request, 'login.html', {'form': form})
+                return redirect('/')
+                #return HttpResponse("ログイン成功" + "\n" + identifier)
             else:
                 return HttpResponse("アカウントが無効です。")
         else:
@@ -28,7 +30,8 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponse("ログアウト")
+    return redirect('/')
+    #return HttpResponse("ログアウト")
 
 
 class UserProfileForm(forms.Form):

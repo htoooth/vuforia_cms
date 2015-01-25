@@ -1,11 +1,17 @@
 {% extends "base.html" %}
 {% block article_content %}
         <h1>Connexion</h1>
-        <form method="post" action="{{ login }}">
-            {% csrf_token %}
-            <table>
-                {{ form.as_table }}
-            </table>
-            <input type="submit" class="button" value="Connection" />
-        </form>
+        {% if user.identifier %}
+            <h4>ログイン中です。</h4>
+            <h5>{{ user.identifier }}
+            <h2><a href="{% url "logout" %}">Logout</a></h2>
+        {% else %}
+            <form method="post" action="{{ login }}">
+                {% csrf_token %}
+                <table>
+                    {{ form.as_table }}
+                </table>
+                <input type="submit" class="button" value="Connection" />
+            </form>
+        {% endif %}
 {% endblock article_content %}
