@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from unittest import skip
 from unittest.mock import patch
 from django.conf import settings
@@ -68,6 +69,13 @@ class AuthenticateTest(TestCase):
                                                  password=USER_1_PASS)
         self.assertEqual(self.userprofile1, authenticated_userprofile)
 
+    def test_login_method(self):
+        before1 = UserProfile.objects.get(id=1).last_login
+        self.client.post('/',
+                         {'identifier': IDENTIFIER_1,
+                          'password': USER_1_PASS}
+        )
+        self.assertNotEqual(before1, UserProfile.objects.get(id=1).last_login)
 
 
     """
