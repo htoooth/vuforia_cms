@@ -1,37 +1,29 @@
 {% extends "base.html" %}
-{% block title_html %}
-    マーカー一覧
-{% endblock title_html %}
-{% load static %}
-{% block head %}
-{% endblock head%}
-{% block h1 %}
-    マーカー一覧
-{% endblock h1 %}
+{% block h1 %}コンテンツ一覧{% endblock h1 %}
 {% block article_content %}
-<table>
-    <tr>
-        <th>CID</th>
-        <th>契約番号</th>
-        <th>公開期間</th>
-        <th>タイトル</th>
-        <th>URL</th>
-    </tr>
-    {% if last_task %}
-    <tr>
-        <td><a href="{% url "task_detail" last_task.id %}">{{ last_task.title }}</a></td>
-        <td>{{ last_task.description|truncatechars:25 }}</td>
-        <td><a href="{% url "update_task" last_task.id %}">Edit</a></td>
-        <td><a href="{% url "task_detail" last_task.id %}">Delete</a></td>
-    </tr>
-    {% endif %}
-    {% for task in tasks_list %}
-    <tr id="task_{{ task.id }}">
-        <td><a href="{% url "task_detail" task.id %}">{{ task.title }}</a></td>
-        <td>{{ task.description|truncatechars:25 }}</td>
-        <td><a href="{% url "update_task" task.id%}">Edit</a></td>
-        <td><button onclick="javascript:task_delete({{ task.id }}, '{% url "task_delete    _ajax" %}');">Delete</button></td>
-    </tr>
-    {% endfor %}
-</table>
+    <h2>&lt;{{ user.identifier }}&gt;がログイン中です。</h2>
+    <h3><a href="{% url "logout" %}">Logout</a></h3>
+    <table border="1">
+        <tr>
+            <th>契約番号</th><th>マーカー</th><th>タイトル</th>
+            <th>ターゲットID</th><th>マッピングURL</th><th>公開期間</th>
+            <th>公開フラグ</th><th>CompanyID</th><th>認識率</th>
+            <th>契約日</th><th>契約解除日</th>
+        </tr>
+        {% for content in content_list %}
+        <tr>
+            <td>{{ content.contract_no }}</td>
+            <td><!-- マーカー画像を取得する。 --></td>
+            <td>{{ content.title }}</td>
+            <td>{{ content.target_id }}</td>
+            <td>{{ content.mapping_url }}</td>
+            <td>{{ content.open_from }} - {{ content.open_to }}</td>
+            <td>{{ content.is_open }}</td>
+            <td>{{ content.company.user_id }}</td>
+            <td>{{ content.recognition }}</td>
+            <td>{{ content.contracted_at }}</td>
+            <td>{{ content.terminated_at }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 {% endblock article_content %}
