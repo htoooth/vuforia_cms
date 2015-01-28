@@ -2,6 +2,9 @@ body {
     font-family: Osaka;
     margin-left: 20px;
 }
+table {
+    text-align: center;
+}
 /*
 tr.important td {
     font-weight: bold;
