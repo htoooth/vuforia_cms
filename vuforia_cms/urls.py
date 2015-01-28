@@ -8,6 +8,8 @@ urlpatterns = patterns('',
 
     url(r'^$', 'cms.views.session.login_view', name='login'),
     url(r'^logout$', 'cms.views.session.logout_view', name='logout'),
+    url(r'^account/list$', 'cms.views.account.list',
+        name='account_list'),
     url(r'^content/list$', 'cms.views.content.list',
         name='content_list'),
     url(r'^admin/', include(admin.site.urls)),

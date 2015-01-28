@@ -92,3 +92,5 @@ AUTH_USER_MODEL = 'cms.UserProfile'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
+
+LOGIN_URL = 'login'

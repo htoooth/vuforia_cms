@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block article_content %}
+    <h1>Vuforia CMS</h1>
+    <h2>&lt;{{ user.identifier }}&gt;がログイン中です。</h2>
+    <h3><a href="{% url "logout" %}">Logout</a></h3>
+    <table border="1">
+        <tr>
+            <th>Identifier</th><th>親Admin</th><th>親Agency</th>
+            <th>会社</th><th>担当者</th><th>住所</th><th>Email</th>
+            <th>TEL</th>
+        </tr>
+        {% for acc in acc_list %}
+        <tr>
+            <td>{{ acc.identifier }}</td>
+            <td>{{ acc.parent_admin_id }}</td>
+            <td>{{ acc.parent_agency_id }}</td>
+            <td>{{ acc.enterprise }}</td>
+            <td>{{ acc.person }}</td>
+            <td>{{ acc.address }}</td>
+            <td>{{ acc.email }}</td>
+            <td>{{ acc.phone_number }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock article_content %}

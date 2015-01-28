@@ -6,19 +6,32 @@ from datetime import datetime, date
 
 # カスタムUserモデルを定義する場合はこれも必要
 class UserProfileManager(BaseUserManager):
-    def create_user(self, acc_type_id, password=None):
+    def create_user(self, acc_type_id, parent_admin_id, parent_agency_id,
+                    enterprise, person, address, email, phone_number,
+                    password=None):
         # Django ドキュメントのサンプルを参考に。
         if not acc_type_id:
             raise ValueError('Users must have an account type ID')
 
-        user = self.model(acc_type_id=acc_type_id,)
+        user = self.model(acc_type_id=acc_type_id,
+                          parent_admin_id=parent_admin_id,
+                          parent_agency_id=parent_agency_id,
+                          enterprise=enterprise, person=person,
+                          address=address, email=email,
+                          phone_number=phone_number)
         user.set_password(password)
         user.save(using=self._db)
 
         return user
 
     def create_superuser(self, acc_type_id, password):
-        user = self.create_user(acc_type_id=acc_type_id, password=password)
+        user = self.create_user(acc_type_id=acc_type_id,
+                                parent_admin_id=parent_admin_id,
+                                parent_agency_id=parent_agency_id,
+                                enterprise=enterprise, person=person,
+                                address=address, email=email,
+                                phone_number=phone_number,
+                                password=password)
         user.is_admin = True
         user.save(using=self._db)
         return user
@@ -46,7 +59,7 @@ class UserProfile(AbstractBaseUser):
     # substitute password of User for this
     #pw          = models.CharField('ログインパスワード', max_length=10)
     parent_admin_id     = models.IntegerField('親AdminID', default=1)
-    parent_agency_id    = models.IntegerField('親AgencyID', default=0)
+    parent_agency_id    = models.IntegerField('親AgencyID', null=True)
     user_running    = models.SmallIntegerField('稼働フラグ', default=0)
     enterprise      = models.CharField('企業名', max_length=64)
     person          = models.CharField('担当者名', max_length=64)

@@ -26,7 +26,8 @@ def login_view(request):
             if user.is_active:
                 login(request, user)
                 #return render(request, 'login.html', {'form': form})
-                return redirect('/')
+                return redirect('/account/list')
+                #return redirect('/')
                 #return HttpResponse("ログイン成功" + "\n" + identifier)
             else:
                 return HttpResponse("アカウントが無効です。")
@@ -35,6 +36,7 @@ def login_view(request):
     else:
         form = UserProfileForm()
     return render(request, 'login.html', {'form': form})
+
 
 def logout_view(request):
     logout(request)
