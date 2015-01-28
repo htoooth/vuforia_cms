@@ -147,8 +147,9 @@ class Content(models.Model):
         verbose_name_plural = 'コンテンツ'
 
     # Attributes
-    contract_no     = models.PositiveIntegerField('契約番号',
-                                                  primary_key=True)
+    contract_no     = models.AutoField('契約番号', primary_key=True)
+    #contract_no     = models.PositiveIntegerField('契約番号',
+    #                                              primary_key=True)
     title           = models.CharField('タイトル', max_length=64)
     target_id       = models.CharField('ターゲットID', max_length=128)
     mapping_url     = models.CharField('マッピングURL', max_length=128)
@@ -157,7 +158,9 @@ class Content(models.Model):
                                        null=True)
     is_open         = models.SmallIntegerField('公開フラグ', default=0)
     sort            = models.IntegerField('ソートインデックス', default=0)
-    user_id         = models.IntegerField('CompanyID')
+
+    company         = models.ForeignKey(UserProfile, verbose_name="Company")
+
     recognition     = models.SmallIntegerField('認識率', default=0)
     contracted_at   = models.CharField('契約日', max_length=16)
     delete_flag     = models.SmallIntegerField('論理削除', default=0)
