@@ -7,7 +7,7 @@
         <tr>
             <th>Identifier</th><th>親Admin</th><th>親Agency</th>
             <th>会社</th><th>担当者</th><th>住所</th><th>Email</th>
-            <th>TEL</th>
+            <th>TEL</th><th>ステータス</th>
         </tr>
         {% for acc in acc_list %}
         <tr>
@@ -19,6 +19,7 @@
             <td>{{ acc.address }}</td>
             <td>{{ acc.email }}</td>
             <td>{{ acc.phone_number }}</td>
+            <td>{{ acc.user_running }}</td>
         </tr>
         {% endfor %}
     </table>
