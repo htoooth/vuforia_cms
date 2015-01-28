@@ -18,20 +18,32 @@ USER_3_PASS = 'companypas'
 class ModelTest(TestCase):
 
     def setUp(self):
-        self.userprofile1 = User.objects.create_user(acc_type_id=1,
-                                                password=USER_1_PASS)
+        self.userprofile1 = User.objects.create_user(
+            acc_type_id=1, parent_admin_id=1, parent_agency_id=None,
+            enterprise="test_enterprise", person="test_person",
+            address="test_address", email="test@com",
+            phone_number="080-1111-2222", password=USER_1_PASS
+        )
 
     def test_set_userprofile_identifier_for_admin(self):
         self.assertEqual(IDENTIFIER_1, self.userprofile1.identifier)
 
     def test_set_userprofile_identifier_for_agency(self):
-        userprofile2 = User.objects.create_user(acc_type_id=2,
-                                                password=USER_2_PASS)
+        userprofile2 = User.objects.create_user(
+            acc_type_id=2, parent_admin_id=1, parent_agency_id=None,
+            enterprise="test_enterprise", person="test_person",
+            address="test_address", email="test@com",
+            phone_number="080-1111-2222", password=USER_2_PASS
+        )
         self.assertEqual(IDENTIFIER_2, userprofile2.identifier)
 
     def test_set_userprofile_identifier_for_company(self):
-        userprofile3 = User.objects.create_user(acc_type_id=3,
-                                                password=USER_3_PASS)
+        userprofile3 = User.objects.create_user(
+            acc_type_id=3, parent_admin_id=1, parent_agency_id=None,
+            enterprise="test_enterprise", person="test_person",
+            address="test_address", email="test@com",
+            phone_number="080-1111-2222", password=USER_3_PASS
+        )
         self.assertEqual(IDENTIFIER_3, userprofile3.identifier)
 
     def test_set_hashed_password(self):
@@ -54,15 +66,24 @@ class ModelTest(TestCase):
     @skip
     def test_delete_all_the_users_when_delete_userprofile_in_bulk(self):
         for i in range(3):
-            User.objects.create_user(acc_type_id=1, password=USER_1_PASS)
+            User.objects.create_user(
+                acc_type_id=1, parent_admin_id=1, parent_agency_id=None,
+                enterprise="test_enterprise", person="test_person",
+                address="test_address", email="test@com",
+                phone_number="080-1111-2222", password=USER_1_PASS
+            )
         self.assertEqual(4, len(User.objects.all()))
         User.objects.all().delete()
         self.assertFalse(AdminUser.objects.all())
 
 class AuthenticateTest(TestCase):
     def setUp(self):
-        self.userprofile1 = User.objects.create_user(acc_type_id=1,
-                                                password=USER_1_PASS)
+        self.userprofile1 = User.objects.create_user(
+            acc_type_id=1, parent_admin_id=1, parent_agency_id=None,
+            enterprise="test_enterprise", person="test_person",
+            address="test_address", email="test@com",
+            phone_number="080-1111-2222", password=USER_1_PASS
+        )
 
     def test_authenticate_method(self):
         authenticated_userprofile = authenticate(identifier=IDENTIFIER_1,
@@ -77,22 +98,3 @@ class AuthenticateTest(TestCase):
         )
         self.assertNotEqual(before1, UserProfile.objects.get(id=1).last_login)
 
-
-    """
-    def test_return_none_if_response_errors(self, mock_post):
-        mock_post.return_value.ok = False
-        mock_post.return_value.json.return_value = {}
-        user = self.backend.authenticate('an assertion')
-        self.assertIsNone(user)
-
-    def test_returns_none_if_status_not_okay(self, mock_post):
-        mock_post.return_value.json.return_value = {'status': 'not okay!'}
-        user = self.backend.authenticate('an assertion')
-        self.assertIsNone(user)
-
-    def test_finds_existing_user_with_email(self, mock_post):
-        mock_post.return_value.json.return_value = {'status': 'okay', 'email': 'a@b.com'}
-        actual_user = User.objects.create(email='a@b.com')
-        found_user = self.backend.authenticate('an assertion')
-        self.assertEqual(found_user, actual_user)
-    """
