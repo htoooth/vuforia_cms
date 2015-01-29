@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block h1 %}アカウント新規登録{% endblock h1 %}
+{% block article_content %}
+    <h2>&lt;{{ user.identifier }}&gt;がログイン中です。</h2>
+    <h3><a href="{% url "logout" %}">Logout</a></h3>
+    <div><button onClick="javascript:history.go(-1);">戻る</button></div>
+    <br />
+
+    <form method="post" action="{% url "account_new" %}" >
+        {% csrf_token %}
+        <!-- This line inserts a CSRF token. -->
+        <table border="1">
+            {{ form.as_table }}
+            <!-- This line displays lines of the form. -->
+        </table>
+        <p><input type="submit" value="作成" /></p>
+    </form>
+{% endblock article_content %}

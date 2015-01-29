@@ -2,7 +2,10 @@
 {% block h1 %}アカウント一覧{% endblock h1 %}
 {% block article_content %}
     <h2>&lt;{{ user.identifier }}&gt;がログイン中です。</h2>
-    <h3><a href="{% url "logout" %}">Logout</a></h3>
+    <div><a href="{% url "logout" %}">Logout</a></div>
+    <br />
+    <div><a href="{% url "account_new" %}">新規登録</a></div>
+    <br />
     <table border="1">
         <tr>
             <th>Identifier</th><th>親Admin</th><th>親Agency</th>
