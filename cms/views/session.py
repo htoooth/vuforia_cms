@@ -34,7 +34,7 @@ def login_view(request):
         else:
             return HttpResponse("Your username and password didn't match.")
     else:
-        form = UserProfileForm()
+        form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
 
@@ -44,14 +44,13 @@ def logout_view(request):
     #return HttpResponse("ログアウト")
 
 
-class UserProfileForm(forms.Form):
+class LoginForm(forms.Form):
     user_id = forms.IntegerField(label="ユーザーID")
     acc_type_id = forms.ChoiceField(label="アカウントタイプ",
                                   choices=UserProfile.ACC_TYPE_CHOICES)
     #identifier = forms.CharField(label="アカウント")
     password = forms.CharField(label="パスワード",
                                widget=forms.PasswordInput)
-
 
 def page(request):
     if request.POST:
