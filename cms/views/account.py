@@ -93,16 +93,6 @@ def edit(request, acctypeid, userid):
                 parent_admin_id = request.user.parent_admin_id
                 parent_agency_id = request.user.user_id
 
-            #edit_account = UserProfile(id=id,
-            #                          acc_type_id=acc_type_id,
-            #                          user_id=userid,
-            #                          parent_admin_id=parent_admin_id,
-            #                          parent_agency_id=parent_agency_id,
-            #                          enterprise=enterprise, person=person,
-            #                          address=address, email=email,
-            #                          phone_number=phone_number,
-            #)
-            #edit_account.save()
             form.save()
             return redirect('/account/list')
         else:
@@ -123,5 +113,5 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('acc_type_id', 'enterprise', 'person', 'address',
-                  'email','phone_number', 'password',)
+                  'email','phone_number',)
 
