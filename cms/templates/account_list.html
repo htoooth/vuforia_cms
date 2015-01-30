@@ -14,7 +14,7 @@
         </tr>
         {% for acc in acc_list %}
         <tr>
-            <td>{{ acc.identifier }}</td>
+            <td><a href="{% url "account_edit" acctypeid=acc.acc_type_id userid=acc.user_id %}">{{ acc.identifier }}</a></td>
             <td>{{ acc.parent_admin_id }}</td>
             <td>{{ acc.parent_agency_id }}</td>
             <td>{{ acc.enterprise }}</td>

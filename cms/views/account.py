@@ -68,6 +68,56 @@ def new(request):
         # Companyは新規作成はできない。
         return redirect('/account/list')
 
+@login_required
+def edit(request, acctypeid, userid):
+    if request.POST:
+        i = UserProfile.objects.get(acc_type_id=acctypeid,
+                                    user_id=userid)
+        form = UserProfileForm(request.POST, instance=i)
+        if form.is_valid():
+            acc_type_id = form.cleaned_data['acc_type_id']
+            enterprise = form.cleaned_data['enterprise']
+            person = form.cleaned_data['person']
+            address = form.cleaned_data['address']
+            email = form.cleaned_data['email']
+            phone_number = form.cleaned_data['phone_number']
+            #password = form.cleaned_data['password']
+
+            if request.user.acc_type_id == 1:
+                parent_admin_id = request.user.parent_admin_id
+                parent_agency_id = None
+            elif request.user.acc_type_id == 2:
+                parent_admin_id = request.user.parent_admin_id
+                parent_agency_id = request.user.user_id
+            elif request.user.acc_type_id == 3:
+                parent_admin_id = request.user.parent_admin_id
+                parent_agency_id = request.user.user_id
+
+            #edit_account = UserProfile(id=id,
+            #                          acc_type_id=acc_type_id,
+            #                          user_id=userid,
+            #                          parent_admin_id=parent_admin_id,
+            #                          parent_agency_id=parent_agency_id,
+            #                          enterprise=enterprise, person=person,
+            #                          address=address, email=email,
+            #                          phone_number=phone_number,
+            #)
+            #edit_account.save()
+            form.save()
+            return redirect('/account/list')
+        else:
+            return render(request, 'account_edit.html',
+                {'form': form, 'acctypeid': acctypeid, 'userid': userid})
+    else:
+        form = UserProfileForm(
+            instance=UserProfile.objects.get(acc_type_id=acctypeid,
+                                             user_id=userid)
+        )
+        if request.user.acc_type_id != 1:
+            form.fields.get('acc_type_id').choices = NOT_ADMIN_CHOICES
+    return render(request, 'account_edit.html',
+                {'form': form, 'acctypeid': acctypeid, 'userid': userid})
+
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
