@@ -16,12 +16,12 @@ def list(request):
         acc_list = UserProfile.objects.filter(
             Q(identifier=request.user.identifier) |
             Q(parent_admin_id__exact=request.user.user_id)
-        )
+        ).order_by('acc_type_id')
     elif request.user.acc_type_id == 2:
         acc_list = UserProfile.objects.filter(
             Q(identifier=request.user.identifier) |
             Q(parent_agency_id__exact=request.user.user_id)
-        )
+        ).order_by('acc_type_id')
     elif request.user.acc_type_id == 3:
         acc_list = UserProfile.objects.filter(identifier=request.user.identifier)
 
