@@ -1,20 +1,35 @@
 from selenium import webdriver
+import unittest
 
-browser = webdriver.Firefox()
+class NewVistorTest(unittest.TestCase):
 
-# Edith has heard about a cool CMS. She goes to check out its homepage.
-browser.get('http://localhost:8000')
+    def setUp(self):
+        self.browser = webdriver.Firefox()
 
-# She notices the page title and header mention login page.
-assert 'Login' in browser.title
+    def tearDown(self):
+        self.browser.quit()
 
-# She types "1" into "ユーザーID" box.
+    def test_can_start_to_login(self):
+        # Edith has heard about a cool CMS.
+        # She goes to check out its homepage.
+        self.browser.get('http://localhost:8000')
 
-# She types "a" into "パスワード" box.
+        # She notices the page title and header mention login page.
+        self.assertIn('Login', self.browser.title)
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('Vuforia CMS', header_text)
 
-# She clicks "Connection" button.
+        # She types "1" into "ユーザーID" box.
 
-# She notices the page title and header mention account list page.
+        # She types "a" into "パスワード" box.
 
-# Satisfied, she goes back to sleep.
-browser.quit()
+        # She clicks "Connection" button.
+
+        # She notices the page title and header mention account list page.
+
+        # Satisfied, she goes back to sleep.
+
+        self.fail('Finish the test')
+
+if __name__ == '__main__':
+    unittest.main(warnings='ignore')
