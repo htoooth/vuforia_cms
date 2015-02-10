@@ -26,7 +26,7 @@ class LoginViewTest(TestCase):
         self.userprofile1 = User.objects.create_user(
             acc_type_id=1, parent_admin_id=1, parent_agency_id=None,
             enterprise="test_enterprise", person="test_person",
-            address="test_address", email="test@com",
+            address="test_address", email="a@b.com",
             phone_number="080-1111-2222", password=USER_1_PASS
         )
 
