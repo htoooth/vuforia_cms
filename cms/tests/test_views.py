@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser
 from cms.views.session import login_view
+from cms.views.account import edit
 
 User = get_user_model()
 IDENTIFIER_1 = 'ad-00000001'
@@ -63,3 +64,43 @@ class LoginViewTest(TestCase):
         response = login_view(request)
         self.assertIn('ログイン中です', response.content.decode())
 
+    def test_edit_function(self):
+        """ django.test.TestCaseの clientを使わない場合
+        request = HttpRequest()
+        request.method = 'POST'
+        request.user = self.userprofile1
+        request.POST['acc_type_id'] = '1'
+        request.POST['enterprise'] = 'edited'
+        request.POST['person'] = 'edited'
+        request.POST['address'] = 'edited'
+        request.POST['email'] = 'a@b.com'
+        request.POST['phone_number'] = 'edited'
+
+        response = edit(request,
+             self.userprofile1.acc_type_id, self.userprofile1.user_id)
+        """
+
+        # @login_requiredとデコレイトされたビューに入る前に。
+        self.client.login(identifier=self.userprofile1.identifier,
+                          password=USER_1_PASS)
+        response = self.client.post(
+            '/account/edit/%s/%s' % (self.userprofile1.acc_type_id,
+                                   self.userprofile1.user_id,),
+            {'acc_type_id': '1', 'enterprise': 'edited',
+                  'person': 'edited', 'address': 'edited',
+                  'email': 'a@b.com', 'phone_number': 'edited'}
+        )
+
+        self.edited_userprofile1 = User.objects.get(
+                acc_type_id=self.userprofile1.acc_type_id,
+                user_id=self.userprofile1.user_id)
+
+        self.assertRedirects(response, '/account/list')
+        self.assertEqual(self.edited_userprofile1.id, self.userprofile1.id)
+        self.assertEqual(self.edited_userprofile1.acc_type_id,
+                         self.userprofile1.acc_type_id)
+        self.assertEqual(self.edited_userprofile1.enterprise, 'edited')
+        self.assertEqual(self.edited_userprofile1.person, 'edited')
+        self.assertEqual(self.edited_userprofile1.address, 'edited')
+        self.assertEqual(self.edited_userprofile1.email, 'a@b.com')
+        self.assertEqual(self.edited_userprofile1.phone_number, 'edited')
