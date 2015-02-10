@@ -1,7 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django import forms
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, \
+                                update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.db.models.query import Q
 
@@ -111,6 +113,14 @@ def edit(request, acctypeid, userid):
                   {'form': form,
                    'acctypeid': int(acctypeid), 'userid': int(userid)})
 
+@login_required
+def edit_pw(request, acctypeid, userid):
+    if request.POST:
+        i = UserProfile.objects.get(acc_type_id=acctypeid,
+                                    user_id=userid)
+        form = PasswordChangeForm(user=i, data=request.POST)
+        #form = UserProfilePasswordForm(request.POST, instance=i)
+        if form.is_valid():
             #password = form.cleaned_data['password']
 
             if request.user.acc_type_id == 1:
@@ -124,19 +134,21 @@ def edit(request, acctypeid, userid):
                 parent_agency_id = request.user.user_id
 
             form.save()
+            update_session_auth_hash(request, form.user)
             return redirect('/account/list')
         else:
-            return render(request, 'account_edit.html',
-                {'form': form, 'acctypeid': acctypeid, 'userid': userid})
+            return render(request, 'account_edit_pw.html',
+                          {'form': form,
+                           'acctypeid': int(acctypeid),
+                           'userid': int(userid)})
     else:
-        form = UserProfileForm(
-            instance=UserProfile.objects.get(acc_type_id=acctypeid,
+        form = PasswordChangeForm(
+            user=UserProfile.objects.get(acc_type_id=acctypeid,
                                              user_id=userid)
         )
-        if request.user.acc_type_id != 1:
-            form.fields.get('acc_type_id').choices = NOT_ADMIN_CHOICES
-    return render(request, 'account_edit.html',
-                {'form': form, 'acctypeid': acctypeid, 'userid': userid})
+    return render(request, 'account_edit_pw.html',
+                  {'form': form,
+                   'acctypeid': int(acctypeid), 'userid': int(userid)})
 
 
 class UserProfileForm(forms.ModelForm):

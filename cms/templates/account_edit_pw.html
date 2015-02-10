@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block h1 %}アカウント編集{% endblock h1 %}
+{% block h1 %}パスワード編集{% endblock h1 %}
 {% block article_content %}
     <h2>&lt;{{ user.identifier }}&gt;がログイン中です。</h2>
     <h3><a href="{% url "logout" %}">Logout</a></h3>
@@ -11,17 +11,14 @@
     </div>
     <br />
 
-    <form method="post" action="{% url "account_edit" acctypeid=acctypeid userid=userid %}" >
+    <form method="post" action="{% url "account_edit_pw" acctypeid=acctypeid userid=userid %}" >
         {% csrf_token %}
         <!-- This line inserts a CSRF token. -->
         <table border="1">
             {{ form.as_table }}
             <!-- This line displays lines of the form. -->
         </table>
-        <p><input type="submit" value="作成" /></p>
+        <p><input type="submit" value="変更" /></p>
     </form>
 
-    {% if user.acc_type_id == acctypeid and user.user_id == userid %}
-        <div><a href="{% url "account_edit_pw" acctypeid=acctypeid  userid=userid  %}">パスワード変更</a><div>
-    {% endif%}
 {% endblock article_content %}
