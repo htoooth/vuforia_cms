@@ -66,7 +66,7 @@ class UserProfile(AbstractBaseUser):
     address         = models.CharField('住所', max_length=64)
     email           = models.EmailField('メールアドレス', )
     phone_number    = models.CharField('電話番号', max_length=16)
-    created_at  = models.DateTimeField('作成日', default=datetime.today(),
+    created_at  = models.DateTimeField('作成日', default=timezone.now,
                                        editable=False)
     updated_at  = models.DateTimeField('更新日', editable=False, null=True)
 
@@ -153,17 +153,15 @@ class Content(models.Model):
     title           = models.CharField('タイトル', max_length=64)
     target_id       = models.CharField('ターゲットID', max_length=128)
     mapping_url     = models.CharField('マッピングURL', max_length=128)
-    open_from       = models.CharField('公開期間 自', max_length=16)
-    open_to         = models.CharField('公開期間 至', max_length=16,
-                                       null=True)
+    open_from       = models.DateField('公開期間 自', default=timezone.now)
+    open_to         = models.DateField('公開期間 至', null=True)
     is_open         = models.SmallIntegerField('公開フラグ', default=0)
     sort            = models.IntegerField('ソートインデックス', default=0)
 
     company         = models.ForeignKey(UserProfile, verbose_name="Company")
 
     recognition     = models.SmallIntegerField('認識率', default=0)
-    contracted_at   = models.CharField('契約日', max_length=16)
-    delete_flag     = models.SmallIntegerField('論理削除', default=0)
+    delete_flag     = models.SmallIntegerField('論理削除', default=1)
     check_duplicate = models.SmallIntegerField('重複チェック', default=0)
-    terminated_at   = models.CharField('契約解除日', max_length=16,
-                                       default="")
+    contracted_at   = models.DateField('契約日', default=timezone.now)
+    terminated_at   = models.DateField('契約解除日', null=True)
