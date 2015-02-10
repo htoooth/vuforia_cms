@@ -104,3 +104,35 @@ class LoginViewTest(TestCase):
         self.assertEqual(self.edited_userprofile1.address, 'edited')
         self.assertEqual(self.edited_userprofile1.email, 'a@b.com')
         self.assertEqual(self.edited_userprofile1.phone_number, 'edited')
+
+    def test_edit_pw_function(self):
+        # @login_requiredとデコレイトされたビューに入る前に。
+        self.client.login(identifier=self.userprofile1.identifier,
+                          password=USER_1_PASS)
+        response = self.client.post(
+            '/account/edit_pw/%s/%s' % (self.userprofile1.acc_type_id,
+                                        self.userprofile1.user_id,),
+            {'old_password': USER_1_PASS,
+             'new_password1': USER_2_PASS,
+             'new_password2': USER_2_PASS}
+        )
+
+        self.edited_userprofile1 = User.objects.get(
+                acc_type_id=self.userprofile1.acc_type_id,
+                user_id=self.userprofile1.user_id)
+
+        """Debug
+        print(response.status_code)
+        print(response['location'])
+        """
+        self.assertRedirects(response, '/account/list')
+        """Django 1.7 で、パスワード変更後、
+        update_session_auth_hash()を使わないと、 ログアウトされ、
+        assertionを以下のようにしないと、テストが失敗する。
+        self.assertRedirects(response, '/account/list',
+                             target_status_code=302)
+        """
+        self.assertEqual(self.edited_userprofile1.id, self.userprofile1.id)
+        self.assertNotEqual(self.edited_userprofile1.password,
+                            self.userprofile1.password)
+
