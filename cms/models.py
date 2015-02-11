@@ -150,18 +150,22 @@ class Content(models.Model):
     contract_no     = models.AutoField('契約番号', primary_key=True)
     #contract_no     = models.PositiveIntegerField('契約番号',
     #                                              primary_key=True)
-    title           = models.CharField('タイトル', max_length=64)
-    target_id       = models.CharField('ターゲットID', max_length=128)
-    mapping_url     = models.CharField('マッピングURL', max_length=128)
+    title           = models.CharField('タイトル', max_length=64, null=True)
+    target_id       = models.CharField('ターゲットID', max_length=128,
+                                       null=True)
+    mapping_url     = models.CharField('マッピングURL', max_length=128,
+                                       null=True)
     open_from       = models.DateField('公開期間 自', default=timezone.now)
     open_to         = models.DateField('公開期間 至', null=True)
     is_open         = models.SmallIntegerField('公開フラグ', default=0)
     sort            = models.IntegerField('ソートインデックス', default=0)
 
-    company         = models.ForeignKey(UserProfile, verbose_name="Company")
+    company         = models.ForeignKey(UserProfile, verbose_name="Company",
+                                        null=True)
 
-    recognition     = models.SmallIntegerField('認識率', default=0)
-    delete_flag     = models.SmallIntegerField('論理削除', default=1)
+    recognition     = models.SmallIntegerField('認識率', default=0,
+                                               null=True)
+    delete_flag     = models.SmallIntegerField('論理削除', default=0)
     check_duplicate = models.SmallIntegerField('重複チェック', default=0)
     contracted_at   = models.DateField('契約日', default=timezone.now)
     terminated_at   = models.DateField('契約解除日', null=True)
