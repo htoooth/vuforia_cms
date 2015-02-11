@@ -7,7 +7,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.db.models.query import Q
 
-from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser
+from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
+                       Content
 
 NOT_ADMIN_CHOICES = ((3, 'Company'),)
 
@@ -91,9 +92,28 @@ def edit(request, acctypeid, userid):
         )
         if request.user.acc_type_id != 1:
             form.fields.get('acc_type_id').choices = NOT_ADMIN_CHOICES
+
+    # 編集アカウントがCompanyの場合には契約情報を取得して渡す。
+    if acctypeid == "3":
+        company = UserProfile.objects.get(acc_type_id__exact=3,
+                                          user_id__exact=int(userid))
+        if request.user.acc_type_id == 1:
+            cont_list = Content.objects.filter(
+                company__exact=company,
+                company__parent_admin_id__exact=request.user.id)
+        elif request.user.acc_type_id == 2:
+            cont_list = Content.objects.filter(
+                company__exact=company,
+                company__parent_agency_id__exact=request.user.id)
+        else:
+            cont_list = None
+    else:
+        cont_list = None
+
     return render(request, 'account_edit.html',
                   {'form': form,
-                   'acctypeid': int(acctypeid), 'userid': int(userid)})
+                   'acctypeid': int(acctypeid), 'userid': int(userid),
+                   'cont_list': cont_list})
 
 @login_required
 def edit_pw(request, acctypeid, userid):

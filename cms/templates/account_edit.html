@@ -24,4 +24,29 @@
     {% if user.acc_type_id == acctypeid and user.user_id == userid %}
         <div><a href="{% url "account_edit_pw" acctypeid=acctypeid  userid=userid  %}">パスワード変更</a><div>
     {% endif%}
+
+    <br />
+    <hr>
+    {% if acctypeid == 3 %}
+        <h2>契約情報</h2>
+        <div><a href="{% url "contract_new" userid %}">新規契約</a></div>
+        <br />
+        {% if cont_list %}
+            <table border="1">
+                <tr>
+                    <th>契約番号</th><th>契約日</th><th>契約解除日</th>
+                    <th>コンテンツ</th><th>契約編集</th>
+                </tr>
+                {% for cont in cont_list %}
+                <tr>
+                    <td>gmr-{{ cont.contract_no }}</a></td>
+                    <td>{{ cont.open_from }}</td>
+                    <td>{{ cont.open_to }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    {% endif %}
 {% endblock article_content %}
