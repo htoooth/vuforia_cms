@@ -77,24 +77,6 @@ def edit(request, acctypeid, userid):
                                     user_id=userid)
         form = UserProfileForm(request.POST, instance=i)
         if form.is_valid():
-            #acc_type_id = form.cleaned_data['acc_type_id']
-            #enterprise = form.cleaned_data['enterprise']
-            #person = form.cleaned_data['person']
-            #address = form.cleaned_data['address']
-            #email = form.cleaned_data['email']
-            #phone_number = form.cleaned_data['phone_number']
-            #password = form.cleaned_data['password']
-
-            #if request.user.acc_type_id == 1:
-                #parent_admin_id = request.user.parent_admin_id
-                #parent_agency_id = None
-            #elif request.user.acc_type_id == 2:
-                #parent_admin_id = request.user.parent_admin_id
-                #parent_agency_id = request.user.user_id
-            #elif request.user.acc_type_id == 3:
-                #parent_admin_id = request.user.parent_admin_id
-                #parent_agency_id = request.user.user_id
-
             form.save()
             return redirect('/account/list')
         else:
