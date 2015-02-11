@@ -43,7 +43,7 @@
                     <td>{{ cont.open_from }}</td>
                     <td>{{ cont.open_to }}</td>
                     <td></td>
-                    <td></td>
+                    <td><a href="{% url "contract_edit" cont.contract_no %}">編集</a></td>
                 </tr>
                 {% endfor %}
             </table>

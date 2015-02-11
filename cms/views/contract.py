@@ -37,30 +37,13 @@ def new(request, companyid):
 
 
 @login_required
-def edit(request):
+def edit(request, contractno):
+    i = Content.objects.get(contract_no__exact=contractno)
     if request.POST:
-        i = UserProfile.objects.get(acc_type_id=acctypeid,
-                                    user_id=userid)
-        form = UserProfileForm(request.POST, instance=i)
-        if form.is_valid():
-            form.save()
-            return redirect('/account/list')
-        else:
-            return render(request, 'account_edit.html',
-                          {'form': form,
-                           'acctypeid': int(acctypeid),
-                           'userid': int(userid)})
+        i.delete()
+        return redirect('/content/list')
     else:
-        form = UserProfileForm(
-            instance=UserProfile.objects.get(acc_type_id=acctypeid,
-                                             user_id=userid)
-        )
-        if request.user.acc_type_id != 1:
-            form.fields.get('acc_type_id').choices = NOT_ADMIN_CHOICES
-    return render(request, 'account_edit.html',
-                  {'form': form,
-                   'acctypeid': int(acctypeid), 'userid': int(userid)})
-
+        return render(request, 'contract_edit.html', {'content': i})
 
 
 class ContractForm(forms.ModelForm):
