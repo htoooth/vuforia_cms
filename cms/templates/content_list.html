@@ -5,24 +5,26 @@
     <h3><a href="{% url "logout" %}">Logout</a></h3>
     <table border="1">
         <tr>
-            <th>契約番号</th><th>マーカー</th><th>タイトル</th>
-            <th>ターゲットID</th><th>マッピングURL</th><th>公開期間</th>
-            <th>公開フラグ</th><th>CompanyID</th><th>認識率</th>
-            <th>契約日</th><th>契約解除日</th>
+            <th>契約番号</th><th>CompanyID</th><th>マーカー</th><th>タイトル</th>
+            <th>ターゲットID</th><th>マッピングURL</th><th>認識率</th>
+            <th>公開期間</th><th>編集</th><th>公開フラグ</th>
         </tr>
         {% for content in content_list %}
         <tr>
             <td>{{ content.contract_no }}</td>
-            <td><!-- マーカー画像を取得する。 --></td>
+            <td>{{ content.company.user_id }}</td>
+            <td>{% if content.image %}<img src="{{ content.image.url }}" width="50" height="50">{% endif %}</td>
             <td>{{ content.title }}</td>
             <td>{{ content.target_id }}</td>
             <td>{{ content.mapping_url }}</td>
-            <td>{{ content.open_from }} - {{ content.open_to }}</td>
-            <td>{{ content.is_open }}</td>
-            <td>{{ content.company.user_id }}</td>
             <td>{{ content.recognition }}</td>
-            <td>{{ content.contracted_at }}</td>
-            <td>{{ content.terminated_at }}</td>
+            <td>{{ content.open_from }} - {{ content.open_to }}</td>
+            {% if content.target_id %}
+                <td><a href="{% url "content_edit" content.contract_no %}">編集</a></td>
+            {% else %}
+                <td><a href="{% url "content_new" content.contract_no %}">登録</a></td>
+            {% endif %}
+            <td>{{ content.is_open }}</td>
         </tr>
         {% endfor %}
     </table>
