@@ -87,6 +87,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'cms/media')
+MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'cms.UserProfile'
 AUTHENTICATION_BACKENDS = (

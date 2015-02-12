@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
+from django.conf import settings
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'vuforia_cms.views.home', name='home'),
@@ -20,11 +22,22 @@ urlpatterns = patterns('',
 
     url(r'^content/list$', 'cms.views.content.list',
         name='content_list'),
+    url(r'^content/new/(?P<contractno>\d+)$', 'cms.views.content.new',
+        name='content_new'),
+    url(r'^content/edit/(?P<contractno>\d+)$', 'cms.views.content.edit',
+        name='content_edit'),
 
     url(r'^contract/new/(?P<companyid>\d+)$', 'cms.views.contract.new',
         name='contract_new'),
-    url(r'^contract/edit/(?P<contractno>\d+)$',
-        'cms.views.contract.edit', name='contract_edit'),
+    url(r'^contract/edit/(?P<contractno>\d+)$', 'cms.views.contract.edit',
+        name='contract_edit'),
 
     url(r'^admin/', include(admin.site.urls)),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        url(r'^media/(?P<path>.*)$','django.views.static.serve',
+           {'document_root': settings.MEDIA_ROOT}),
+    )
+
