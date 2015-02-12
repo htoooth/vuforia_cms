@@ -52,7 +52,7 @@ def new(request, contractno):
             # フォームのデータをDBに保存する。
             form.save()
 
-            return redirect('/account/list')
+            return redirect('/content/list')
         else:
             return render(request, 'content_new.html',
                 {'form': form, 'contractno': contractno, 'company': company})
