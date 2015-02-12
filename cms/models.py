@@ -150,6 +150,7 @@ class Content(models.Model):
     contract_no     = models.AutoField('契約番号', primary_key=True)
     #contract_no     = models.PositiveIntegerField('契約番号',
     #                                              primary_key=True)
+    image           = models.ImageField(upload_to ="images", null=True)
     title           = models.CharField('タイトル', max_length=64, null=True)
     target_id       = models.CharField('ターゲットID', max_length=128,
                                        null=True)
