@@ -7,6 +7,12 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.db.models.query import Q
 
+# CustomClearableFileInput用に。
+from django.utils.safestring import mark_safe
+from django.utils.html import escape, conditional_escape
+from django.utils.encoding import force_text
+from django.forms.widgets import ClearableFileInput, Input, CheckboxInput
+
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
                        Content
 
@@ -92,8 +98,46 @@ def edit(request, contractno):
             {'form': form, 'contractno': contractno, 'company': company})
 
 
+class CustomClearableFileInput(ClearableFileInput):
+    """
+    下の ContentFormクラスのためのウィジェット
+    (画像編集の時の Djangoのデフォルトを修正するために)
+    """
+    def render(self, name, value, attrs=None):
+        substitutions = {
+            #uncomment to get 'Currently'
+            'initial_text': "", # self.initial_text,
+            'input_text': self.input_text,
+            'clear_template': '',
+            'clear_checkbox_label': self.clear_checkbox_label,
+            }
+        template = '%(input)s'
+        substitutions['input'] = Input.render(self, name, value, attrs)
+
+        if value and hasattr(value, "url"):
+            template = self.template_with_initial
+            substitutions['initial'] = (
+                        '<img src="%s" alt="%s" width="80" height="80"/>'
+                                        % (escape(value.url),
+                                           escape(force_text(value))))
+            if not self.is_required:
+                checkbox_name = self.clear_checkbox_name(name)
+                checkbox_id = self.clear_checkbox_id(checkbox_name)
+                substitutions['clear_checkbox_name'] = conditional_escape(
+                                                            checkbox_name)
+                substitutions['clear_checkbox_id'] = conditional_escape(
+                                                            checkbox_id)
+                substitutions['clear'] = CheckboxInput().render(
+                            checkbox_name, False, attrs={'id': checkbox_id})
+                substitutions['clear_template'] = (self.template_with_clear
+                                                        % substitutions)
+
+        return mark_safe(template % substitutions)
 
 class ContentForm(forms.ModelForm):
+    image = forms.ImageField(label='マーカー', required=False,
+                             widget=CustomClearableFileInput())
+    #image = forms.ImageField(label='マーカー', required=False, widget=forms.FileInput)
     class Meta:
         model = Content
         fields = ('open_from', 'open_to', 'title', 'mapping_url', 'image',)
