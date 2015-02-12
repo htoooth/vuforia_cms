@@ -62,48 +62,35 @@ def new(request, contractno):
             {'form': form, 'contractno': contractno, 'company': company})
 
 @login_required
-def edit(request, acctypeid, userid):
+def edit(request, contractno):
+    i = Content.objects.get(contract_no__exact=contractno)
+    company = i.company
     if request.POST:
-        i = UserProfile.objects.get(acc_type_id=acctypeid,
-                                    user_id=userid)
-        form = ContentForm(request.POST, instance=i)
+        form = ContentForm(request.POST, request.FILES, instance=i)
         if form.is_valid():
+            # Vuforia APIで変更処理が成功したら続きの処理を行う。
+
+            open_from   = form.cleaned_data['open_from']
+            open_to     = form.cleaned_data['open_to']
+            title       = form.cleaned_data['title']
+            mapping_url = form.cleaned_data['mapping_url']
+
+            # JSONファイルを作る。
+
+            # 画像サムネイルを作る。
+
+            # フォームのデータをDBに保存する。
             form.save()
-            return redirect('/account/list')
-        else:
-            return render(request, 'account_edit.html',
-                          {'form': form,
-                           'acctypeid': int(acctypeid),
-                           'userid': int(userid)})
-    else:
-        form = ContentForm(
-            instance=UserProfile.objects.get(acc_type_id=acctypeid,
-                                             user_id=userid)
-        )
-        if request.user.acc_type_id != 1:
-            form.fields.get('acc_type_id').choices = NOT_ADMIN_CHOICES
 
-    # 編集アカウントがCompanyの場合には契約情報を取得して渡す。
-    if acctypeid == "3":
-        company = UserProfile.objects.get(acc_type_id__exact=3,
-                                          user_id__exact=int(userid))
-        if request.user.acc_type_id == 1:
-            cont_list = Content.objects.filter(
-                company__exact=company,
-                company__parent_admin_id__exact=request.user.id)
-        elif request.user.acc_type_id == 2:
-            cont_list = Content.objects.filter(
-                company__exact=company,
-                company__parent_agency_id__exact=request.user.id)
+            return redirect('/content/list')
         else:
-            cont_list = None
+            return render(request, 'content_edit.html',
+                {'form': form, 'contractno': contractno, 'company': company})
     else:
-        cont_list = None
+        form = ContentForm(instance=i)
+    return render(request, 'content_edit.html',
+            {'form': form, 'contractno': contractno, 'company': company})
 
-    return render(request, 'account_edit.html',
-                  {'form': form,
-                   'acctypeid': int(acctypeid), 'userid': int(userid),
-                   'cont_list': cont_list})
 
 
 class ContentForm(forms.ModelForm):
