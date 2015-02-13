@@ -27,6 +27,9 @@ urlpatterns = patterns('',
     url(r'^content/edit/(?P<contractno>\d+)$', 'cms.views.content.edit',
         name='content_edit'),
 
+    url(r'^content/edit_open/(?P<contractno>\d+)$',
+        'cms.views.content.edit_open', name='content_edit_open'),
+
     url(r'^contract/new/(?P<companyid>\d+)$', 'cms.views.contract.new',
         name='contract_new'),
     url(r'^contract/edit/(?P<contractno>\d+)$', 'cms.views.contract.edit',

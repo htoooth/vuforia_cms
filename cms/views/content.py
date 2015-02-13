@@ -120,6 +120,17 @@ def edit(request, contractno):
     return render(request, 'content_edit.html',
             {'form': form, 'contractno': contractno, 'company': company})
 
+@login_required
+def edit_open(request, contractno):
+
+    i = Content.objects.get(contract_no__exact=contractno)
+    if i.is_open == 1:
+        i.is_open = 0
+    else:
+        i.is_open = 1
+    i.save()
+    return redirect('/content/list')
+
 
 class CustomClearableFileInput(ClearableFileInput):
     """
