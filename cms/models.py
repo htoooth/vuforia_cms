@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, \
                                        BaseUserManager
 from django.utils import timezone
+
+import hashlib
+import os.path
 from datetime import datetime, date
 
 # カスタムUserモデルを定義する場合はこれも必要
@@ -146,12 +149,17 @@ class Content(models.Model):
         verbose_name = 'コンテンツ'
         verbose_name_plural = 'コンテンツ'
 
+
+    def get_image_path(instance, filename):
+        return "images/%s%s" % (instance.contract_no,
+                                os.path.splitext(filename)[1])
+
     # Attributes
     contract_no     = models.AutoField('契約番号', primary_key=True)
     #contract_no     = models.PositiveIntegerField('契約番号',
     #                                              primary_key=True)
     image           = models.ImageField('マーカー',
-                                        upload_to ="images", null=True)
+                                        upload_to =get_image_path, null=True)
     title           = models.CharField('タイトル', max_length=64, null=True)
     target_id       = models.CharField('ターゲットID', max_length=128,
                                        null=True)
