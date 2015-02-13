@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout, \
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.db.models.query import Q
+from django.conf import settings
 
 # CustomClearableFileInput用に。
 from django.utils.safestring import mark_safe
@@ -15,6 +16,26 @@ from django.forms.widgets import ClearableFileInput, Input, CheckboxInput
 
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
                        Content
+
+import os, json
+
+def create_json(contractno, title, open_from, open_to, mapping_url):
+    """
+    JSONファイルを作成・保存する関数
+    """
+    json_dict = {}
+    json_dict['CONTRACT_NO'] = contractno
+    json_dict['TITLE'] = title
+    json_dict['OPEN_FROM'] = open_from.strftime('%Y-%m-%d')
+    json_dict['OPEN_TO'] = open_to.strftime('%Y-%m-%d')
+    json_dict['TYPE'] = 'url'
+    json_dict['URL'] = mapping_url
+
+    p = os.path.join(settings.BASE_DIR, 'cms/static/json',
+                     contractno + '.json')
+    with open(p, "w", encoding="utf-8") as json_fp:
+        #json.dump(json_dict, json_fp)
+        json.dump(json_dict, json_fp, ensure_ascii=False)
 
 @login_required
 def list(request):
@@ -52,6 +73,7 @@ def new(request, contractno):
             mapping_url = form.cleaned_data['mapping_url']
 
             # JSONファイルを作る。
+            create_json(contractno, title, open_from, open_to, mapping_url)
 
             # 画像サムネイルを作る。
 
@@ -82,6 +104,7 @@ def edit(request, contractno):
             mapping_url = form.cleaned_data['mapping_url']
 
             # JSONファイルを作る。
+            create_json(contractno, title, open_from, open_to, mapping_url)
 
             # 画像サムネイルを作る。
 
