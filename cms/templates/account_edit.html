@@ -35,7 +35,7 @@
             <table border="1">
                 <tr>
                     <th>契約番号</th><th>契約日</th><th>契約解除日</th>
-                    <th>コンテンツ</th><th>契約編集</th>
+                    <th>コンテンツ</th><th>契約編集</th><th>画像登録</th>
                 </tr>
                 {% for cont in cont_list %}
                 <tr>
@@ -44,6 +44,12 @@
                     <td>{{ cont.open_to }}</td>
                     <td></td>
                     <td><a href="{% url "contract_edit" cont.contract_no %}">編集</a></td>
+                    {% if cont.target_id %}
+                        <td><a href="{% url "content_edit" cont.contract_no %}">編集</a></td>
+                    {% else %}
+                        <td><a href="{% url "content_new" cont.contract_no %}">登録</a></td>
+                    {% endif %}
+
                 </tr>
                 {% endfor %}
             </table>
