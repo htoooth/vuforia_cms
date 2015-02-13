@@ -116,6 +116,17 @@ def edit(request, acctypeid, userid):
                    'cont_list': cont_list})
 
 @login_required
+def edit_status(request, acctypeid, userid):
+    i = UserProfile.objects.get(acc_type_id=acctypeid,
+                                user_id=userid)
+    if i.user_running == 1:
+        i.user_running = 0
+    else:
+        i.user_running = 1
+    i.save()
+    return redirect('/account/list')
+
+@login_required
 def edit_pw(request, acctypeid, userid):
     if request.POST:
         i = UserProfile.objects.get(acc_type_id=acctypeid,

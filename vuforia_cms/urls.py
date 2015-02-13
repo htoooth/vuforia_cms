@@ -19,6 +19,8 @@ urlpatterns = patterns('',
         'cms.views.account.edit', name='account_edit'),
     url(r'^account/edit_pw/(?P<acctypeid>\d+)/(?P<userid>\d+)$',
         'cms.views.account.edit_pw', name='account_edit_pw'),
+    url(r'^account/edit_status/(?P<acctypeid>\d+)/(?P<userid>\d+)$',
+        'cms.views.account.edit_status', name='account_edit_status'),
 
     url(r'^content/list$', 'cms.views.content.list',
         name='content_list'),

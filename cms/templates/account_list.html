@@ -23,7 +23,7 @@
             <td>{{ acc.address }}</td>
             <td>{{ acc.email }}</td>
             <td>{{ acc.phone_number }}</td>
-            <td>{{ acc.user_running }}</td>
+            <td><a href="{% url "account_edit_status" acc.acc_type_id acc.user_id %}">{{ acc.user_running }}</a></td>
         </tr>
         {% endfor %}
     </table>
