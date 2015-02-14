@@ -96,3 +96,37 @@ AUTHENTICATION_BACKENDS = (
 )
 
 LOGIN_URL = 'login'
+
+"""
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'filters': {
+        # 省略
+    },
+    'handlers': {
+        # 省略
+
+        'to_file': {
+            'formatter': 'simple',
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/Users/js/Desktop/django.log',
+        },
+    },
+    'loggers': {
+        # 省略
+
+        'django_site': {
+            'handlers': ['to_file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    }
+}
+"""
