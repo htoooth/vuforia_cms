@@ -170,7 +170,9 @@ class CustomClearableFileInput(ClearableFileInput):
 
 class ContentForm(forms.ModelForm):
     image = forms.ImageField(label='マーカー', required=False,
-                             widget=CustomClearableFileInput())
+                             widget=CustomClearableFileInput(),
+                             #allow_empty_file=True
+                             )
     #image = forms.ImageField(label='マーカー', required=False, widget=forms.FileInput)
     class Meta:
         model = Content

@@ -159,7 +159,8 @@ class Content(models.Model):
     #contract_no     = models.PositiveIntegerField('契約番号',
     #                                              primary_key=True)
     image           = models.ImageField('マーカー',
-                                        upload_to =get_image_path, null=True)
+                                        upload_to =get_image_path, null=True,
+                                        blank=True)
     title           = models.CharField('タイトル', max_length=64, null=True)
     target_id       = models.CharField('ターゲットID', max_length=128,
                                        null=True)
