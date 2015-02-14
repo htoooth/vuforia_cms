@@ -85,7 +85,7 @@ def new(request, contractno):
             return render(request, 'content_new.html',
                 {'form': form, 'contractno': contractno, 'company': company})
     else:
-        form = ContentForm()
+        form = ContentForm(instance=i)
     return render(request, 'content_new.html',
             {'form': form, 'contractno': contractno, 'company': company})
 
