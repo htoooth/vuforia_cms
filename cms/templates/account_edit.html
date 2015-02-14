@@ -28,10 +28,10 @@
     <br />
     <hr>
     {% if acctypeid == 3 %}
-        <h2>契約情報</h2>
-        <div><a href="{% url "contract_new" userid %}">新規契約</a></div>
-        <br />
         {% if cont_list %}
+            <h2>契約情報</h2>
+            <div><a href="{% url "contract_new" userid %}">新規契約</a></div>
+            <br />
             <table border="1">
                 <tr>
                     <th>契約番号</th><th>契約日</th><th>契約解除日</th>
@@ -47,7 +47,7 @@
                     {% if cont.target_id %}
                         <td><a href="{% url "content_edit" cont.contract_no %}">編集</a></td>
                     {% else %}
-                        <td><a href="{% url "content_new" cont.contract_no %}">登録</a></td>
+                        <td><a href="{% url "content_edit" cont.contract_no %}">登録</a></td>
                     {% endif %}
 
                 </tr>

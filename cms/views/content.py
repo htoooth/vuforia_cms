@@ -17,7 +17,7 @@ from django.forms.widgets import ClearableFileInput, Input, CheckboxInput
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
                        Content
 
-import os, json
+import os, json, logging
 
 def create_json(contractno, title, open_from, open_to, mapping_url):
     """
@@ -59,8 +59,14 @@ def list(request):
                   {'content_list': content_list})
 
 @login_required
-def new(request, contractno):
+def edit(request, contractno):
+    # 既存のコンテンツインスタンス(契約)
     i = Content.objects.get(contract_no__exact=contractno)
+    # その画像ファイルの名前
+    old_file_name = i.image.name
+    # その画像ファイルのパス
+    old_file_path = os.path.join(settings.MEDIA_ROOT, i.image.name)
+
     company = i.company
     if request.POST:
         form = ContentForm(request.POST, request.FILES, instance=i)
@@ -80,36 +86,14 @@ def new(request, contractno):
             # フォームのデータをDBに保存する。
             form.save()
 
-            return redirect('/content/list')
-        else:
-            return render(request, 'content_new.html',
-                {'form': form, 'contractno': contractno, 'company': company})
-    else:
-        form = ContentForm(instance=i)
-    return render(request, 'content_new.html',
-            {'form': form, 'contractno': contractno, 'company': company})
+            # 新たな画像が送られてきたとき、若しくはクリアが選択されたときは
+            # 既存のファイルは削除する。
+            if old_file_name and (i.image.name != old_file_name):
+                os.remove(old_file_path)
 
-@login_required
-def edit(request, contractno):
-    i = Content.objects.get(contract_no__exact=contractno)
-    company = i.company
-    if request.POST:
-        form = ContentForm(request.POST, request.FILES, instance=i)
-        if form.is_valid():
-            # Vuforia APIで変更処理が成功したら続きの処理を行う。
-
-            open_from   = form.cleaned_data['open_from']
-            open_to     = form.cleaned_data['open_to']
-            title       = form.cleaned_data['title']
-            mapping_url = form.cleaned_data['mapping_url']
-
-            # JSONファイルを作る。
-            create_json(contractno, title, open_from, open_to, mapping_url)
-
-            # 画像サムネイルを作る。
-
-            # フォームのデータをDBに保存する。
-            form.save()
+            # TODO: ロギング
+            #logger = logging.getLogger(__name__)
+            #logger.debug('ファイル削除？')
 
             return redirect('/content/list')
         else:
@@ -119,6 +103,7 @@ def edit(request, contractno):
         form = ContentForm(instance=i)
     return render(request, 'content_edit.html',
             {'form': form, 'contractno': contractno, 'company': company})
+
 
 @login_required
 def edit_open(request, contractno):

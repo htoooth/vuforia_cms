@@ -11,7 +11,7 @@
     <p>契約番号: {{ contractno }}</p>
     <br />
 
-    <form method="post" action="{% url "content_new" contractno %}" enctype="multipart/form-data">
+    <form method="post" action="{% url "content_edit" contractno %}" enctype="multipart/form-data">
         {% csrf_token %}
         <!-- This line inserts a CSRF token. -->
         <table border="1">
