@@ -91,9 +91,12 @@ def edit(request, contractno):
             if old_file_name and (i.image.name != old_file_name):
                 os.remove(old_file_path)
 
-            # TODO: ロギング
-            #logger = logging.getLogger(__name__)
-            #logger.debug('ファイル削除？')
+                # TODO: ロギング
+                logging.basicConfig(filename='/Users/js/Desktop/django.log',
+                                    level=logging.INFO)
+                logging.info('ファイル削除\n')
+                #logger = logging.getLogger(__name__)
+                #logger.debug('ファイル削除？')
 
             return redirect('/content/list')
         else:
