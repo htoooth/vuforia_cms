@@ -100,11 +100,11 @@ def edit(request, acctypeid, userid):
         if request.user.acc_type_id == 1:
             cont_list = Content.objects.filter(
                 company__exact=company,
-                company__parent_admin_id__exact=request.user.id)
+                company__parent_admin_id__exact=request.user.user_id)
         elif request.user.acc_type_id == 2:
             cont_list = Content.objects.filter(
                 company__exact=company,
-                company__parent_agency_id__exact=request.user.id)
+                company__parent_agency_id__exact=request.user.user_id)
         else:
             cont_list = None
     else:
