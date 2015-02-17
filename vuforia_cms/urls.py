@@ -24,8 +24,8 @@ urlpatterns = patterns('',
 
     url(r'^content/list$', 'cms.views.content.list',
         name='content_list'),
-    #url(r'^content/new/(?P<contractno>\d+)$', 'cms.views.content.new',
-    #    name='content_new'),
+    url(r'^content/new/(?P<contractno>\d+)$', 'cms.views.content.new',
+        name='content_new'),
     url(r'^content/edit/(?P<contractno>\d+)$', 'cms.views.content.edit',
         name='content_edit'),
 

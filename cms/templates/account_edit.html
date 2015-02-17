@@ -47,7 +47,7 @@
                     {% if cont.target_id %}
                         <td><a href="{% url "content_edit" cont.contract_no %}">編集</a></td>
                     {% else %}
-                        <td><a href="{% url "content_edit" cont.contract_no %}">登録</a></td>
+                        <td><a href="{% url "content_new" cont.contract_no %}">登録</a></td>
                     {% endif %}
 
                 </tr>

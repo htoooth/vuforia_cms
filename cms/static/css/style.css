@@ -5,6 +5,9 @@ body {
 table {
     text-align: center;
 }
+.error {
+    color: red;
+}
 /*
 tr.important td {
     font-weight: bold;

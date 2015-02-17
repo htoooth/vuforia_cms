@@ -20,13 +20,15 @@
             <td>{{ content.recognition }}</td>
             <td>{{ content.open_from }} - {{ content.open_to }}</td>
             <td>
-                <a href="{% url "content_edit" content.contract_no %}">
-                    {% if content.target_id %}
-                        編集
-                    {% else %}
-                        登録
-                    {% endif %}
-                </a>
+                {% if content.target_id %}
+                    <a href="{% url "content_edit" content.contract_no %}">
+                            編集
+                    </a>
+                {% else %}
+                    <a href="{% url "content_new" content.contract_no %}">
+                            登録
+                    </a>
+                {% endif %}
             </td>
             <td><a href="{% url "content_edit_open" content.contract_no %}">{{ content.is_open }}</a></td>
         </tr>
