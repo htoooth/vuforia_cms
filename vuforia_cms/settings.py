@@ -110,26 +110,22 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             },
-        """
-        'to_file': {
-            'formatter': 'simple',
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': '/Users/js/Desktop/django.log',
-        },
-        """
+        #'to_file': {
+        #    'formatter': 'simple',
+        #    'level': 'DEBUG',
+        #    'class': 'logging.FileHandler',
+        #    'filename': '/Users/js/Desktop/django.log',
+        #},
     },
     'loggers': {
         'django': {
             'handlers': ['console'],
         },
-        """
-        'django_site': {
-            'handlers': ['to_file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        """
+        #'django_site': {
+        #    'handlers': ['to_file'],
+        #    'level': 'DEBUG',
+        #    'propagate': True,
+        #},
     },
     'root': {'level': 'INFO'}
 }
