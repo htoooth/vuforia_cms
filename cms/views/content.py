@@ -110,7 +110,7 @@ def new(request, contractno):
 
             res = v.add_target(
                     {"name": title, "width": 320, "image": image,
-                     "application_metadata": metadata, "active_flag": 1})
+                     "application_metadata": metadata, "active_flag": 0})
 
             print(res)
 
