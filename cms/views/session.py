@@ -2,6 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django import forms
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, permission_required
+
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser
 
 # cf. 「Django完全解説」p.278、「TDD with Python」p.245
@@ -23,7 +25,8 @@ def login_view(request):
         # フォームの認証
         user = authenticate(identifier=identifier, password=password)
         if user is not None:
-            if user.is_active:
+            if user.has_perm('cms.running'):
+            #if user.is_active:
                 login(request, user)
                 #return render(request, 'login.html', {'form': form})
                 return redirect('/account/list')

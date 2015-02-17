@@ -4,7 +4,9 @@ from django import forms
 from django.contrib.auth import authenticate, login, logout, \
                                 update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Permission
+from django.contrib.auth.decorators import login_required, \
+                                           permission_required
 from django.db.models.query import Q
 
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
@@ -13,6 +15,7 @@ from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
 NOT_ADMIN_CHOICES = ((3, 'Company'),)
 
 @login_required
+@permission_required('cms.running', raise_exception=True)
 def list(request):
     # ログインしているユーザー所有のアカウントをすべて取得する。
     if request.user.acc_type_id == 1:
@@ -31,6 +34,7 @@ def list(request):
     return render(request, 'account_list.html', {'acc_list': acc_list})
 
 @login_required
+@permission_required('cms.running', raise_exception=True)
 def new(request):
     if request.user.acc_type_id != 3:
         if request.POST:
@@ -72,6 +76,7 @@ def new(request):
         return redirect('/account/list')
 
 @login_required
+@permission_required('cms.running', raise_exception=True)
 def edit(request, acctypeid, userid):
     if request.POST:
         i = UserProfile.objects.get(acc_type_id=acctypeid,
@@ -116,17 +121,24 @@ def edit(request, acctypeid, userid):
                    'cont_list': cont_list})
 
 @login_required
+@permission_required('cms.running', raise_exception=True)
 def edit_status(request, acctypeid, userid):
     i = UserProfile.objects.get(acc_type_id=acctypeid,
                                 user_id=userid)
+
+    perm = Permission.objects.get(codename='running')
+
     if i.user_running == 1:
         i.user_running = 0
+        i.user_permissions.remove(perm)
     else:
         i.user_running = 1
+        i.user_permissions.add(perm)
     i.save()
     return redirect('/account/list')
 
 @login_required
+@permission_required('cms.running', raise_exception=True)
 def edit_pw(request, acctypeid, userid):
     if request.POST:
         i = UserProfile.objects.get(acc_type_id=acctypeid,

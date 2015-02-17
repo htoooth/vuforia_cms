@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth import authenticate, login, logout, \
                                 update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models.query import Q
 
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
@@ -13,6 +13,7 @@ from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
 NOT_ADMIN_CHOICES = ((3, 'Company'),)
 
 @login_required
+@permission_required('cms.running', raise_exception=True)
 def new(request, companyid):
     if request.user.acc_type_id != 3:
         if request.POST:
@@ -37,6 +38,7 @@ def new(request, companyid):
 
 
 @login_required
+@permission_required('cms.running', raise_exception=True)
 def edit(request, contractno):
     i = Content.objects.get(contract_no__exact=contractno)
     if request.POST:

@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth import authenticate, login, logout, \
                                 update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models.query import Q
 from django.conf import settings
 
@@ -59,6 +59,7 @@ def create_json(contractno, title, open_from, open_to, mapping_url):
         json.dump(metadata_dict, json_fp, ensure_ascii=False)
 
 @login_required
+@permission_required('cms.running', raise_exception=True)
 def list(request):
     # ログインしているユーザー所有のアカウントの持つ全コンテンツを渡す。
     if request.user.acc_type_id == 1:
@@ -80,6 +81,7 @@ def list(request):
                   {'content_list': content_list})
 
 @login_required
+@permission_required('cms.running', raise_exception=True)
 def new(request, contractno):
     error_message = ''
     # 既存のコンテンツインスタンス(契約)
@@ -147,6 +149,7 @@ def new(request, contractno):
 
 
 @login_required
+@permission_required('cms.running', raise_exception=True)
 def edit(request, contractno):
     error_message = ''
     # 既存のコンテンツインスタンス(契約)
@@ -228,6 +231,7 @@ def edit(request, contractno):
 
 
 @login_required
+@permission_required('cms.running', raise_exception=True)
 def edit_open(request, contractno):
     i = Content.objects.get(contract_no__exact=contractno)
     if   i.is_open == 1: new_is_open = 0
