@@ -167,7 +167,7 @@ class Content(models.Model):
     mapping_url     = models.CharField('マッピングURL', max_length=128,
                                        null=True)
     open_from       = models.DateField('公開期間 自', default=timezone.now)
-    open_to         = models.DateField('公開期間 至', null=True)
+    open_to         = models.DateField('公開期間 至', null=True, blank=True)
     is_open         = models.SmallIntegerField('公開フラグ', default=0)
     sort            = models.IntegerField('ソートインデックス', default=0)
 
