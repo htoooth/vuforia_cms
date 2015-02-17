@@ -41,11 +41,14 @@ class UserProfileManager(BaseUserManager):
 
 
 
-class UserProfile(AbstractBaseUser):
+class UserProfile(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'ユーザー'
         verbose_name_plural = 'ユーザー'
         unique_together = ('acc_type_id', 'user_id')
+        permissions = (
+            ('running', 'can log in'),
+        )
 
     ACC_TYPE_CHOICES = (
         (1, 'Admin'),
