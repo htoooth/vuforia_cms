@@ -229,14 +229,28 @@ def edit(request, contractno):
 
 @login_required
 def edit_open(request, contractno):
-
     i = Content.objects.get(contract_no__exact=contractno)
-    if i.is_open == 1:
-        i.is_open = 0
+    if   i.is_open == 1: new_is_open = 0
+    elif i.is_open == 0: new_is_open = 1
+
+    # Vuforiaへの登録処理
+    v = vuforia.Vuforia(access_key=vuforia.ACCESS_KEY,
+                        secret_key=vuforia.SECRET_KEY)
+    data = {"active_flag": new_is_open}
+    res = v.update_target(i.target_id, data)
+    print(res)
+
+    # Vuforia APIで登録処理が成功したら続きの処理を行う。
+    if res['result_code'] == "Success":
+        i.is_open = new_is_open
+        i.save()
+        return redirect('/content/list')
+    # Vuforiaのレスポンスが成功でない場合
     else:
-        i.is_open = 1
-    i.save()
-    return redirect('/content/list')
+        # エラーメッセージを出力して戻る。
+        error_message = res['result_code']
+    return render(request, 'content_list.html',
+                  {'error_message': error_message})
 
 
 #class CustomClearableFileInput(ClearableFileInput):

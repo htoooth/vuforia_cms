@@ -3,6 +3,11 @@
 {% block article_content %}
     <h2>&lt;{{ user.identifier }}&gt;がログイン中です。</h2>
     <h3><a href="{% url "logout" %}">Logout</a></h3>
+
+    {% if error_message %}
+    <h3 class="error">{{ error_message }}</h3>
+    {% endif %}
+
     <table border="1">
         <tr>
             <th>契約番号</th><th>CompanyID</th><th>マーカー</th><th>タイトル</th>
