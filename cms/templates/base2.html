@@ -47,17 +47,17 @@
 
 <ul class="breadcrumb">
 <li><i class="icon-home"></i><a href="">Dashboard</a></li>
-<li><span class="divider">&gt;</span>管理::アカウント一覧</li>
+<li><span class="divider">&gt;</span>{% block breadcrumb %}{% endblock %}</li>
 </ul>
 
 <div class="row-fluid">
 <div class="span3">
 <div class="well sidebar-nav">
 <ul class="nav nav-list">
-<li class="nav-header"><i class="icon-file"></i>Vuforia CMS</li>
-<li><a href="{% url "content_list" %}"><i class="icon-pencil"></i>一覧</a></li>
-<li class="nav-header" style="border-top:1px solid #DDD;padding-top:10px;"><i class="icon-cog"></i>管理</li>
-<li><a href="{% url "account_list" %}"><i class="icon-user"></i>アカウント</a></li>
+    <!-- <li class="nav-header"><i class="icon-file"></i></li> -->
+<li><a href="{% url "content_list" %}"><i class="icon-pencil"></i>マーカー一覧へ</a></li>
+<!-- <li class="nav-header" style="border-top:1px solid #DDD;padding-top:10px;"><i class="icon-cog"></i></li> -->
+<li><a href="{% url "account_list" %}"><i class="icon-user"></i>アカウント一覧へ</a></li>
 </ul>
 </div><!--/.well -->
 </div><!--/span-->
