@@ -1,0 +1,43 @@
+body{
+	margin: 0;
+	padding: 0;
+	background: #eee;
+	font-size: 12px;
+}
+
+.txtBlock2 {
+	background: none repeat scroll 0 0 #FFF3A5;
+	border: 3px solid #F69D34;
+	margin: 0 0 12px;
+	padding: 10px 15px;
+}
+
+.jcropper-holder { border: 1px black solid; }
+
+.jcExample
+{
+	text-align: left;
+	background: white;
+	width: 520px;
+	margin: 1.5em auto 2em auto;
+	border: 1px #999 solid;
+	padding: 1em 2em 2em;
+}
+
+.jcExample .article { width: 520px; }
+
+#cropBlock {
+	margin-top: 15px;
+	background: #333;
+	padding:10px;
+}
+
+.ttlBlock1 {
+	background: url("../../img/ttl_bg_01.gif") no-repeat scroll left top #EEEEEE;
+	color: #494949;
+	font-size: 16px;
+	font-weight: bold;
+	margin: 0 0 12px;
+	padding: 10px 5px 8px 20px;
+	line-height: 120%;
+}
