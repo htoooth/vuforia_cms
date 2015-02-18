@@ -12,7 +12,7 @@
             <th>会社</th><th>担当者</th><th>住所</th><th>Email</th>
             <th>TEL</th><th>ステータス</th>
         </tr>
-        {% for acc in acc_list %}
+        {% for acc in accs %}
         <tr>
             <td><a href="{% url "account_edit" acctypeid=acc.acc_type_id userid=acc.user_id %}">{{ acc.identifier }}</a></td>
             <td>{{ acc.parent_admin_id }}</td>
@@ -26,4 +26,44 @@
         </tr>
         {% endfor %}
     </table>
+
+    <div class="pagination">
+    <ul>
+        <li>{% if accs.has_previous %}
+                <a href="?page={{ accs.previous_page_number }}">Previous</a>
+            {% endif %}
+        </li>
+
+        {% for c in loop %}
+            {% if forloop.counter == accs.number %}
+                <li class="active"><a href="#">{{ accs.number }}</a></li>
+            {% else %}
+            <li><a href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        <li>{% if accs.has_next %}
+                <a href="?page={{ accs.next_page_number }}">Next</a>
+            {% endif %}
+        </li>
+    </ul>
+    </div>
+
+    <!--
+    <div class="pagination">
+        <span class="step-links">
+            {% if accs.has_previous %}
+                <a href="?page={{ accs.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ accs.number }} of {{ accs.paginator.num_pages }}.
+            </span>
+
+            {% if accs.has_next %}
+                <a href="?page={{ accs.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+     -->
 {% endblock article_content %}

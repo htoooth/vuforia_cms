@@ -15,7 +15,7 @@
             <!-- <th>認識率</th> -->
             <th>公開期間</th><th>編集</th><th>公開</th>
         </tr>
-        {% for content in content_list %}
+        {% for content in contents %}
         <tr>
             <td>{{ content.contract_no }}</td>
             <td>{{ content.company.user_id }}</td>
@@ -40,4 +40,28 @@
         </tr>
         {% endfor %}
     </table>
+
+
+    <div class="pagination">
+    <ul>
+        <li>{% if contents.has_previous %}
+                <a href="?page={{ contents.previous_page_number }}">Previous</a>
+            {% endif %}
+        </li>
+
+        {% for c in loop %}
+            {% if forloop.counter == contents.number %}
+                <li class="active"><a href="#">{{ contents.number }}</a></li>
+            {% else %}
+            <li><a href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        <li>{% if contents.has_next %}
+                <a href="?page={{ contents.next_page_number }}">Next</a>
+            {% endif %}
+        </li>
+    </ul>
+    </div>
+
 {% endblock article_content %}

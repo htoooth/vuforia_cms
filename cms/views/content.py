@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout, \
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models.query import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 
 # CustomFileInput用に。
@@ -77,8 +78,20 @@ def list(request):
             company__user_id__exact=request.user.user_id
         )
 
+    paginator = Paginator(content_list, 2)
+    page = request.GET.get('page')
+    try:
+        contents = paginator.page(page)
+    except PageNotAnInteger:
+        contents = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        contents = paginator.page(paginator.num_pages)
+
+    # テンプレートでは回数（int型）でイテレートできない？
+    loop = [x for x in range(paginator.num_pages)]
     return render(request, 'content_list.html',
-                  {'content_list': content_list})
+                  {'loop': loop, 'contents': contents})
 
 @login_required
 @permission_required('cms.running', raise_exception=True)

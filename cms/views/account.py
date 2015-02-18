@@ -8,6 +8,7 @@ from django.contrib.auth.models import Permission
 from django.contrib.auth.decorators import login_required, \
                                            permission_required
 from django.db.models.query import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
                        Content
@@ -31,7 +32,20 @@ def list(request):
     elif request.user.acc_type_id == 3:
         acc_list = UserProfile.objects.filter(identifier=request.user.identifier)
 
-    return render(request, 'account_list.html', {'acc_list': acc_list})
+    paginator = Paginator(acc_list, 2)
+    page = request.GET.get('page')
+    try:
+        accs = paginator.page(page)
+    except PageNotAnInteger:
+        accs = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        accs = paginator.page(paginator.num_pages)
+
+    # テンプレートでは回数（int型）でイテレートできない？
+    loop = [x for x in range(paginator.num_pages)]
+    return render(request, 'account_list.html',
+                  {"loop": loop, "accs": accs})
 
 @login_required
 @permission_required('cms.running', raise_exception=True)
