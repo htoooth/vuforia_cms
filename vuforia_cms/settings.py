@@ -10,9 +10,9 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+#BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # from "TDD with Python"
-# BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -62,7 +62,9 @@ WSGI_APPLICATION = 'vuforia_cms.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 「TDD with Python」p.141より (デプロイ時に)
+        'NAME': os.path.join(BASE_DIR, '../database/db.sqlite3'),
     }
 }
 
@@ -87,7 +89,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'cms/media')
+# 「TDD with Python」p.141より (デプロイ時に)
+STATIC_ROOT = os.path.join(BASE_DIR, '../static')
+
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'cms/media')
+# 「TDD with Python」p.141より (デプロイ時に)
+MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'cms.UserProfile'
