@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>{% block title_html %}{% endblock %}</title>
+ {% load staticfiles %}
+<!-- for Apache Rewrite -->
+<base href="">
+<!-- Le styles -->
+<link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+<link href="{% static "css/custom.css" %}" rel="stylesheet">
+<!--<link href="{% static "css/bootstrap-responsive.css" %}" rel="stylesheet">-->
+
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if IE 6]>
+    <link href="{% static "css/ie6.min.css" %}" rel="stylesheet">
+<![endif]-->
+
+<!-- Le fav and touch icons
+<link rel="shortcut icon" href="images/favicon.ico">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">-->
+
+{% block head %}{% endblock %}
+</head>
+
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner">
+<div class="container-fluid">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</a>
+<a class="brand" href="./">Vuforia CMS</a>
+<div class="nav-collapse">
+
+    <p class="navbar-text pull-right">Logged in as &lt;{{ user.identifier }}&gt; <a href="{% url "logout" %}">Logout</a></p>
+</div><!--/.nav-collapse -->
+</div>
+</div>
+</div>
+
+<div class="container-fluid">
+
+<ul class="breadcrumb">
+<li><i class="icon-home"></i><a href="">Dashboard</a></li>
+<li><span class="divider">&gt;</span>管理::アカウント一覧</li>
+</ul>
+
+<div class="row-fluid">
+<div class="span3">
+<div class="well sidebar-nav">
+<ul class="nav nav-list">
+<li class="nav-header"><i class="icon-file"></i>Vuforia CMS</li>
+<li><a href="{% url "content_list" %}"><i class="icon-pencil"></i>一覧</a></li>
+<li class="nav-header" style="border-top:1px solid #DDD;padding-top:10px;"><i class="icon-cog"></i>管理</li>
+<li><a href="{% url "account_list" %}"><i class="icon-user"></i>アカウント</a></li>
+</ul>
+</div><!--/.well -->
+</div><!--/span-->
+
+<div class="span9">
+
+<!--ALERT-->
+<!--ALERT_end-->
+
+<div class="page-header">
+    <h1>{% block h1 %}{% endblock %}{% block button %}{% endblock %}</h1>
+</div>
+
+<article>
+    {% block article_content %}{% endblock %}
+</article>
+
+<table class="table table-list table-striped table-bordered table-condensed"></table>
+
+<div class="pagination">
+<ul>
+    <li><a href="">Prev</a></li>
+    <li class="active"><a href="#"></a></li>
+    <li><a href=""></a></li>
+    <li><a href="">Next</a></li>
+</ul>
+</div>
+
+
+</div><!--/span-->
+</div><!--/row-->
+<hr>
+
+<footer>
+<p>&copy; Vuforia CMS 2015</p>
+</footer>
+
+</div><!--/.fluid-container-->
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{% static "js/jquery.js" %}"></script>
+<script src="{% static "js/ie6.min.js" %}"></script>
+<script src="{% static "js/bootstrap-transition.js" %}"></script>
+<script src="{% static "js/bootstrap-alert.js" %}"></script>
+<script src="{% static "js/bootstrap-modal.js" %}"></script>
+<script src="{% static "js/bootstrap-dropdown.js" %}"></script>
+<script src="{% static "js/bootstrap-scrollspy.js" %}"></script>
+<script src="{% static "js/bootstrap-tab.js" %}"></script>
+<script src="{% static "js/bootstrap-tooltip.js" %}"></script>
+<script src="{% static "js/bootstrap-popover.js" %}"></script>
+<script src="{% static "js/bootstrap-button.js" %}"></script>
+<script src="{% static "js/bootstrap-collapse.js" %}"></script>
+<script src="{% static "js/bootstrap-carousel.js" %}"></script>
+<script src="{% static "js/bootstrap-typeahead.js" %}"></script>
+<script src="{% static "js/bootstrap-datepicker.js" %}"></script>
+<script src="{% static "js/script.js" %}"></script>
+
+
+<script type="text/javascript">
+
+$(function(){if($.browser.msie&&parseInt($.browser.version,10)===6){$('.row div[class^="span"]:last-child').addClass("last-child");$('[class*="span"]').addClass("margin-left-20");$(':button[class="btn"], :reset[class="btn"], :submit[class="btn"], input[type="button"]').addClass("button-reset");$(":checkbox").addClass("input-checkbox");$('[class^="icon-"], [class*=" icon-"]').addClass("icon-sprite");$(".pagination li:first-child a").addClass("pagination-first-child")}})
+
+</script>
+</body>
+</html>
+
+

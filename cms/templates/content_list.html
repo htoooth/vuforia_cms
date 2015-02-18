@@ -1,18 +1,19 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
+{% block title_html %}Content List{% endblock title_html %}
 {% block h1 %}コンテンツ一覧{% endblock h1 %}
 {% block article_content %}
-    <h2>&lt;{{ user.identifier }}&gt;がログイン中です。</h2>
-    <h3><a href="{% url "logout" %}">Logout</a></h3>
 
     {% if error_message %}
     <h3 class="error">{{ error_message }}</h3>
     {% endif %}
 
-    <table border="1">
+    <!-- <table border="1"> -->
+    <table class="table table-list table-striped table-bordered table-condensed">
         <tr>
-            <th>契約番号</th><th>CompanyID</th><th>マーカー</th><th>タイトル</th>
-            <th>ターゲットID</th><th>マッピングURL</th><th>認識率</th>
-            <th>公開期間</th><th>編集</th><th>公開フラグ</th>
+            <th>契約番号</th><th>CID</th><th>マーカー</th><th>タイトル</th>
+            <!-- <th>ターゲットID</th> --><th>マッピングURL</th>
+            <!-- <th>認識率</th> -->
+            <th>公開期間</th><th>編集</th><th>公開</th>
         </tr>
         {% for content in content_list %}
         <tr>
@@ -20,9 +21,9 @@
             <td>{{ content.company.user_id }}</td>
             <td>{% if content.image %}<img src="{{ content.image.url }}" width="50" height="50">{% endif %}</td>
             <td>{{ content.title }}</td>
-            <td>{{ content.target_id }}</td>
+            <!-- <td>{{ content.target_id }}</td> -->
             <td>{{ content.mapping_url }}</td>
-            <td>{{ content.recognition }}</td>
+            <!-- <td>{{ content.recognition }}</td> -->
             <td>{{ content.open_from }} - {{ content.open_to }}</td>
             <td>
                 {% if content.target_id %}

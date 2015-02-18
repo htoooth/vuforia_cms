@@ -1,13 +1,12 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
 {% block title_html %}Account List{% endblock title_html %}
 {% block h1 %}アカウント一覧{% endblock h1 %}
+{% block button %}<button class="entryBtn btn btn-small" onclick="location.href='{% url "account_new" %}'">新規登録</button>{% endblock %}
 {% block article_content %}
-    <h2>&lt;{{ user.identifier }}&gt;がログイン中です。</h2>
-    <div><a href="{% url "logout" %}">Logout</a></div>
     <br />
-    <div><a href="{% url "account_new" %}">新規登録</a></div>
     <br />
-    <table border="1">
+    <!-- <table border="1"> -->
+    <table class="table table-list table-striped table-bordered table-condensed">
         <tr>
             <th>Identifier</th><th>親Admin</th><th>親Agency</th>
             <th>会社</th><th>担当者</th><th>住所</th><th>Email</th>
