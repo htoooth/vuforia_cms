@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, \
                                        BaseUserManager
+from django.core.validators import RegexValidator
 from django.utils import timezone
 
 import hashlib
@@ -71,7 +72,11 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     person          = models.CharField('担当者名', max_length=64)
     address         = models.CharField('住所', max_length=64)
     email           = models.EmailField('メールアドレス', )
-    phone_number    = models.CharField('電話番号', max_length=16)
+    phone_number    = models.CharField('電話番号', max_length=16,
+            error_messages={
+              'incomplete': '数字もしくはハイフンのみで入力してください。'},
+            validators=[RegexValidator(r'^[\d-]+$',
+                          '数字もしくはハイフンのみで入力してください。')])
     created_at  = models.DateTimeField('作成日', default=timezone.now,
                                        editable=False)
     updated_at  = models.DateTimeField('更新日', editable=False, null=True)
