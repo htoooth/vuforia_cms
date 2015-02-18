@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django import forms
 from django.contrib.auth import authenticate, login, logout, \
                                 update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.models import Permission
 from django.contrib.auth.decorators import login_required, \
                                            permission_required
@@ -14,6 +14,7 @@ from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
                        Content
 
 NOT_ADMIN_CHOICES = ((3, 'Company'),)
+PW_MIN_LENGTH = 8
 
 @login_required
 @permission_required('cms.running', raise_exception=True)
@@ -52,7 +53,7 @@ def list(request):
 def new(request):
     if request.user.acc_type_id != 3:
         if request.POST:
-            form = UserProfileForm(request.POST)
+            form = CreateUserProfileForm(request.POST)
             if form.is_valid():
                 acc_type_id = form.cleaned_data['acc_type_id']
                 enterprise = form.cleaned_data['enterprise']
@@ -81,7 +82,7 @@ def new(request):
             else:
                 return render(request, 'account_new.html', {'form': form})
         else:
-            form = UserProfileForm()
+            form = CreateUserProfileForm()
             if request.user.acc_type_id != 1:
                 form.fields.get('acc_type_id').choices = NOT_ADMIN_CHOICES
         return render(request, 'account_new.html', {'form': form})
@@ -196,23 +197,37 @@ class UserProfileForm(forms.ModelForm):
         fields = ('acc_type_id', 'enterprise', 'person', 'address',
                   'email','phone_number',)
 
-class ValidatingPasswordChangeForm(PasswordChangeForm):
-    MIN_LENGTH = 8
+class CreateUserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('acc_type_id', 'enterprise', 'person', 'address',
+                  'email','phone_number', 'password',)
+        widgets = {'password': forms.PasswordInput(),}
 
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        # At least PW_MIN_LENGTH long
+        if len(password) < PW_MIN_LENGTH:
+            raise forms.ValidationError(
+                "The new password must be at least %d characters long." % PW_MIN_LENGTH)
+        # At least one letter and one non-letter
+        first_isalpha = password[0].isalpha()
+        if all(c.isalpha() == first_isalpha for c in password):
+            raise forms.ValidationError(
+                "The new password must contain at least one letter and at least one digit or punctuation character.")
+        return password
+
+
+class ValidatingPasswordChangeForm(PasswordChangeForm):
     def clean_new_password1(self):
         password1 = self.cleaned_data.get('new_password1')
-
-        # At least MIN_LENGTH long
-        if len(password1) < self.MIN_LENGTH:
+        # At least PW_MIN_LENGTH long
+        if len(password1) < PW_MIN_LENGTH:
             raise forms.ValidationError(
-                "The new password must be at least %d characters long." % self.MIN_LENGTH)
-
+                "The new password must be at least %d characters long." % PW_MIN_LENGTH)
         # At least one letter and one non-letter
         first_isalpha = password1[0].isalpha()
         if all(c.isalpha() == first_isalpha for c in password1):
             raise forms.ValidationError(
                 "The new password must contain at least one letter and at least one digit or punctuation character.")
-
-        # ... any other validation you want ...
-
         return password1
