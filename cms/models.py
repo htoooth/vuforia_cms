@@ -167,7 +167,7 @@ class Content(models.Model):
     title           = models.CharField('タイトル', max_length=64, null=True)
     target_id       = models.CharField('ターゲットID', max_length=128,
                                        null=True)
-    mapping_url     = models.CharField('マッピングURL', max_length=128,
+    mapping_url     = models.URLField('マッピングURL', max_length=128,
                                        null=True)
     open_from       = models.DateField('公開期間 自', default=timezone.now)
     open_to         = models.DateField('公開期間 至', null=True, blank=True)
