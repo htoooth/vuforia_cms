@@ -1,24 +1,29 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
 {% block h1 %}アカウント編集{% endblock h1 %}
+{% block button %}<button class="entryBtn btn btn-small" onClick="javascript:history.go(-1);">戻る</button>{% endblock %}
 {% block article_content %}
-    <h2>&lt;{{ user.identifier }}&gt;がログイン中です。</h2>
-    <h3><a href="{% url "logout" %}">Logout</a></h3>
-    <div><button onClick="javascript:history.go(-1);">戻る</button></div>
-    <br />
-    <div>
-        アカウントタイプ:{{ acctypeid }}<br/>
-        ユーザーID: {{ userid }}
-    </div>
-    <br />
+    <form method="post" action="{% url "account_edit" acctypeid=acctypeid userid=userid %}" class="form-horizontal">
+        <div class="control-group">
+        <label for="input01" class="control-label">アカウントタイプ</label>
+        <div class="controls"><input type="text" name="category" value="{{ acctypeid }}" disabled="disabled"></div>
 
-    <form method="post" action="{% url "account_edit" acctypeid=acctypeid userid=userid %}" >
+        <label for="input01" class="control-label">ユーザーID</label>
+        <div class="controls"><input type="text" name="category" value="{{ userid }}" disabled="disabled"></div>
+        </div>
+        <br />
+
         {% csrf_token %}
         <!-- This line inserts a CSRF token. -->
-        <table border="1">
+        <!-- <table class="table table-list table-striped table-bordered table-condensed"> -->
+        <table align="center" class="table-list table-condensed">
             {{ form.as_table }}
             <!-- This line displays lines of the form. -->
         </table>
-        <p><input type="submit" value="作成" /></p>
+        <div class="form-actions">
+        <div class="tac">
+        <button class="btn btn-primary btn-large" type="submit">更新する</button>
+        </div>
+        </div>
     </form>
 
     {% if user.acc_type_id == acctypeid and user.user_id == userid %}
@@ -29,20 +34,19 @@
     <hr>
     {% if acctypeid == 3 %}
         {% if cont_list %}
-            <h2>契約情報</h2>
-            <div><a href="{% url "contract_new" userid %}">新規契約</a></div>
-            <br />
-            <table border="1">
+
+            <h2>契約情報<a class="entryBtn btn btn-danger btn-small" href="{% url "contract_new" userid %}">新規契約</a></h2>
+            <table class="table table-list table-striped table-bordered table-condensed">
                 <tr>
                     <th>契約番号</th><th>契約日</th><th>契約解除日</th>
-                    <th>コンテンツ</th><th>契約編集</th><th>画像登録</th>
+                    <th>マーカー画像</th><th>契約編集</th><th>画像登録</th>
                 </tr>
                 {% for cont in cont_list %}
                 <tr>
                     <td>gmr-{{ cont.contract_no }}</a></td>
                     <td>{{ cont.open_from }}</td>
                     <td>{{ cont.open_to }}</td>
-                    <td></td>
+                    <td>{% if cont.image %}<img src="{{ cont.image.url }}" width="50" height="50">{% endif %}</td>
                     <td><a href="{% url "contract_edit" cont.contract_no %}">編集</a></td>
                     {% if cont.target_id %}
                         <td><a href="{% url "content_edit" cont.contract_no %}">編集</a></td>
