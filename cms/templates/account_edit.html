@@ -1,6 +1,10 @@
 {% extends "base2.html" %}
 {% block h1 %}アカウント編集{% endblock h1 %}
-{% block button %}<button class="entryBtn btn btn-small" onClick="javascript:history.go(-1);">戻る</button>{% endblock %}
+{% block button %}
+    {% if user.acc_type_id == acctypeid and user.user_id == userid %}
+        <button class="entryBtn btn btn-small" onclick="location.href='/account/edit_pw/{{ acctypeid }}/{{ userid }}'">パスワード変更</button>
+    {% endif%}
+{% endblock %}
 {% block article_content %}
     <form method="post" action="{% url "account_edit" acctypeid=acctypeid userid=userid %}" class="form-horizontal">
         <div class="control-group">
@@ -26,9 +30,6 @@
         </div>
     </form>
 
-    {% if user.acc_type_id == acctypeid and user.user_id == userid %}
-        <div><a href="{% url "account_edit_pw" acctypeid=acctypeid  userid=userid  %}">パスワード変更</a><div>
-    {% endif%}
 
     <br />
     <hr>
