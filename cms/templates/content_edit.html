@@ -1,27 +1,32 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
 {% block h1 %}マーカー編集{% endblock h1 %}
+{% block button %}
+    <button class="entryBtn btn btn-small" onClick="javascript:history.go(-1);">戻る</button>
+{% endblock %}
+{% block breadcrumb %}マーカー編集{% endblock %}
 {% block article_content %}
-    <h2>&lt;{{ user.identifier }}&gt;がログイン中です。</h2>
-    <h3><a href="{% url "logout" %}">Logout</a></h3>
-    <div><button onClick="javascript:history.go(-1);">戻る</button></div>
-    <br />
-
-    <p>企業名: {{ company.enterprise }}</p>
-    <p>Company ID: {{ company.user_id }}</p>
-    <p>契約番号: {{ contractno }}</p>
-    <br />
-
     {% if error_message %}
     <h3 class="error">{{ error_message }}</h3>
     {% endif %}
 
-    <form method="post" action="{% url "content_edit" contractno %}" enctype="multipart/form-data">
+    <div style="text-align: center;">
+    <p>企業名: {{ company.enterprise }}</p>
+    <p>CID: {{ company.user_id }}</p>
+    <p>契約番号: {{ contractno }}</p>
+    </div>
+
+    <form method="post" action="{% url "content_edit" contractno %}" enctype="multipart/form-data" class="form-horizontal">
         {% csrf_token %}
         <!-- This line inserts a CSRF token. -->
-        <table border="1">
+        <!-- <table class="table table-list table-striped table-bordered table-condensed"> -->
+        <table align="center" class="table-list table-condensed">
             {{ form.as_table }}
             <!-- This line displays lines of the form. -->
         </table>
-        <p><input type="submit" value="変更" /></p>
+        <div class="form-actions">
+        <div class="tac">
+        <button class="btn btn-primary btn-large" type="submit">更新</button>
+        </div>
+        </div>
     </form>
 {% endblock article_content %}
