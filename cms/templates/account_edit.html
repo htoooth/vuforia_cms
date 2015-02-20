@@ -5,6 +5,7 @@
         <button class="entryBtn btn btn-small" onclick="location.href='/account/edit_pw/{{ acctypeid }}/{{ userid }}'">パスワード変更</button>
     {% endif%}
 {% endblock %}
+{% block breadcrumb %}アカウント編集{% endblock %}
 {% block article_content %}
     <form method="post" action="{% url "account_edit" acctypeid=acctypeid userid=userid %}" class="form-horizontal">
         <div class="control-group">
