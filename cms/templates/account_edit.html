@@ -33,9 +33,9 @@
     <br />
     <hr>
     {% if acctypeid == 3 %}
-        {% if cont_list %}
 
-            <h2>契約情報<a class="entryBtn btn btn-danger btn-small" href="{% url "contract_new" userid %}">新規契約</a></h2>
+        <h2>契約情報<a class="entryBtn btn btn-danger btn-small" href="{% url "contract_new" userid %}">新規契約</a></h2>
+        {% if cont_list %}
             <table class="table table-list table-striped table-bordered table-condensed">
                 <tr>
                     <th>契約番号</th><th>契約日</th><th>契約解除日</th>
