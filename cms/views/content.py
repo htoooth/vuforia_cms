@@ -114,8 +114,11 @@ def new(request, contractno):
             mapping_url = form.cleaned_data['mapping_url']
 
             # Vuforiaへの登録処理
-            v = vuforia.Vuforia(access_key=vuforia.ACCESS_KEY,
-                                secret_key=vuforia.SECRET_KEY)
+            key_path = os.path.join(settings.BASE_DIR, '../accesskey.json')
+            with open(key_path, "r", encoding="utf-8") as key_fp:
+                key_dict = json.load(key_fp)
+            v = vuforia.Vuforia(access_key=key_dict["ACCESS_KEY"],
+                                secret_key=key_dict["SECRET_KEY"])
             if request.FILES:
                 image = base64.b64encode(
                         request.FILES['image'].read()).decode('utf-8')
@@ -186,8 +189,11 @@ def edit(request, contractno):
             print(metadata)
 
             # Vuforiaへの登録処理
-            v = vuforia.Vuforia(access_key=vuforia.ACCESS_KEY,
-                                secret_key=vuforia.SECRET_KEY)
+            key_path = os.path.join(settings.BASE_DIR, '../accesskey.json')
+            with open(key_path, "r", encoding="utf-8") as key_fp:
+                key_dict = json.load(key_fp)
+            v = vuforia.Vuforia(access_key=key_dict["ACCESS_KEY"],
+                                secret_key=key_dict["SECRET_KEY"])
             if not request.FILES:
                 data = {"name": title, "width": 320,
                         "application_metadata": metadata}
@@ -251,8 +257,11 @@ def edit_open(request, contractno):
     elif i.is_open == 0: new_is_open = 1
 
     # Vuforiaへの登録処理
-    v = vuforia.Vuforia(access_key=vuforia.ACCESS_KEY,
-                        secret_key=vuforia.SECRET_KEY)
+    key_path = os.path.join(settings.BASE_DIR, '../accesskey.json')
+    with open(key_path, "r", encoding="utf-8") as key_fp:
+        key_dict = json.load(key_fp)
+    v = vuforia.Vuforia(access_key=key_dict["ACCESS_KEY"],
+                        secret_key=key_dict["SECRET_KEY"])
     data = {"active_flag": new_is_open}
     res = v.update_target(i.target_id, data)
     print(res)

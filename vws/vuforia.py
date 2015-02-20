@@ -12,9 +12,6 @@ import requests
 from pprint import pprint
 import binascii
 
-ACCESS_KEY="44fb7f9c4ce4d05cddd29a79ed2cb41d56463a3f"
-SECRET_KEY="5993b47b9ae0912e10ece2c98f59219867a01e42"
-
 
 class VuforiaBaseError(Exception):
     def __init__(self, exc, response):
