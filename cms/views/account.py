@@ -7,6 +7,7 @@ from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.models import Permission
 from django.contrib.auth.decorators import login_required, \
                                            permission_required
+from django.db import transaction
 from django.db.models.query import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -48,6 +49,7 @@ def list(request):
     return render(request, 'account_list.html',
                   {"loop": loop, "accs": accs})
 
+@transaction.atomic
 @login_required
 @permission_required('cms.running', raise_exception=True)
 def new(request):
@@ -78,6 +80,7 @@ def new(request):
                                 address=address, email=email,
                                 phone_number=phone_number,
                                 password=password)
+
                 return redirect('/account/list')
             else:
                 return render(request, 'account_new.html', {'form': form})
@@ -90,6 +93,7 @@ def new(request):
         # Companyは新規作成はできない。
         return redirect('/account/list')
 
+@transaction.atomic
 @login_required
 @permission_required('cms.running', raise_exception=True)
 def edit(request, acctypeid, userid):
@@ -135,6 +139,7 @@ def edit(request, acctypeid, userid):
                    'acctypeid': int(acctypeid), 'userid': int(userid),
                    'cont_list': cont_list})
 
+@transaction.atomic
 @login_required
 @permission_required('cms.running', raise_exception=True)
 def edit_status(request, acctypeid, userid):
@@ -152,6 +157,7 @@ def edit_status(request, acctypeid, userid):
     i.save()
     return redirect('/account/list')
 
+@transaction.atomic
 @login_required
 @permission_required('cms.running', raise_exception=True)
 def edit_pw(request, acctypeid, userid):
