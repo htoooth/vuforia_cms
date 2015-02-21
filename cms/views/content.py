@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout, \
                                 update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required, permission_required
+from django.db import transaction
 from django.db.models.query import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
@@ -93,6 +94,7 @@ def list(request):
     return render(request, 'content_list.html',
                   {'loop': loop, 'contents': contents})
 
+@transaction.atomic
 @login_required
 @permission_required('cms.running', raise_exception=True)
 def new(request, contractno):
@@ -124,28 +126,27 @@ def new(request, contractno):
                         request.FILES['image'].read()).decode('utf-8')
             metadata = create_metadata(i.contract_no, title, open_from,
                                        open_to, mapping_url)
-            print(metadata)
+
+            # JSONファイルを作る。
+            create_json(contractno, title, open_from, open_to,
+                        mapping_url)
+
+            # 画像サムネイルを作る。
+
+            # フォームのデータをDBに仮保存する。
+            new_content = form.save(commit=False)
 
             res = v.add_target(
                     {"name": title, "width": 320, "image": image,
                      "application_metadata": metadata, "active_flag": 0})
 
-            print(res)
-
             # Vuforia APIで登録処理が成功したら続きの処理を行う。
             if res['result_code'] == "TargetCreated":
-
-                # JSONファイルを作る。
-                create_json(contractno, title, open_from, open_to,
-                            mapping_url)
-
-                # 画像サムネイルを作る。
-
-                # フォームのデータをDBに保存する。
-                new_content = form.save(commit=False)
                 new_content.target_id = res['target_id']
-                new_content.save()
 
+                # TODO: ここでエラーとなると、
+                # Vuforiaには登録されていて、自DBには無い状態になる。
+                new_content.save()
                 return redirect('/content/list')
 
             # Vuforiaのレスポンスが成功でない場合
@@ -162,8 +163,7 @@ def new(request, contractno):
             {'form': form, 'contractno': contractno,
              'company': company, 'error_message': error_message})
 
-
-
+@transaction.atomic
 @login_required
 @permission_required('cms.running', raise_exception=True)
 def edit(request, contractno):
@@ -204,20 +204,19 @@ def edit(request, contractno):
                 data = {"name": title, "width": 320, "image": image,
                         "application_metadata": metadata}
 
+            # JSONファイルを作る。
+            create_json(contractno, title, open_from, open_to,
+                        mapping_url)
+
+            # 画像サムネイルを作る。
+
+            # フォームのデータをDBに保存する。
+            new_content = form.save(commit=False)
+
             res = v.update_target(i.target_id, data)
-            print(res)
 
             # Vuforia APIで登録処理が成功したら続きの処理を行う。
             if res['result_code'] == "Success":
-
-                # JSONファイルを作る。
-                create_json(contractno, title, open_from, open_to,
-                            mapping_url)
-
-                # 画像サムネイルを作る。
-
-                # フォームのデータをDBに保存する。
-                new_content = form.save(commit=False)
                 new_content.save()
 
                 # 新たな画像が送られてきたとき、
@@ -249,6 +248,7 @@ def edit(request, contractno):
              'company': company, 'error_message': error_message})
 
 
+@transaction.atomic
 @login_required
 @permission_required('cms.running', raise_exception=True)
 def edit_open(request, contractno):
@@ -263,13 +263,12 @@ def edit_open(request, contractno):
     v = vuforia.Vuforia(access_key=key_dict["ACCESS_KEY"],
                         secret_key=key_dict["SECRET_KEY"])
     data = {"active_flag": new_is_open}
+    i.save()
     res = v.update_target(i.target_id, data)
-    print(res)
 
     # Vuforia APIで登録処理が成功したら続きの処理を行う。
     if res['result_code'] == "Success":
         i.is_open = new_is_open
-        i.save()
         return redirect('/content/list')
     # Vuforiaのレスポンスが成功でない場合
     else:
