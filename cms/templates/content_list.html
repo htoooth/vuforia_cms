@@ -28,7 +28,7 @@
             {% if content.target_id %}
             <td class="tac nowrap"><button type="button" class="btn btn-small btn-primary" onclick="location.href='/content/edit/{{ content.contract_no }}'">編集</button></td>
             {% else %}
-            <td class="tac nowrap"><button type="button" class="btn btn-small btn-warning" onclick="location.href='/content/edit/{{ content.contract_no }}'">登録</button></td>
+            <td class="tac nowrap"><button type="button" class="btn btn-small btn-warning" onclick="location.href='/content/new/{{ content.contract_no }}'">登録</button></td>
             {% endif %}
 
             {% if content.is_open %}
