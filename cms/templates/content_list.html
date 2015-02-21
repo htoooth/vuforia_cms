@@ -12,8 +12,7 @@
     <table class="table table-list table-striped table-bordered table-condensed">
         <tr>
             <th>契約番号</th><th>CID</th><th>マーカー</th><th>タイトル</th>
-            <!-- <th>ターゲットID</th> --><th>マッピングURL</th>
-            <!-- <th>認識率</th> -->
+            <th>マッピングURL</th><!-- <th>認識率</th> -->
             <th>公開期間</th><th>編集</th><th>公開</th>
         </tr>
         {% for content in contents %}
@@ -22,22 +21,22 @@
             <td>{{ content.company.user_id }}</td>
             <td>{% if content.image %}<img src="{{ content.image.url }}" width="50" height="50">{% endif %}</td>
             <td>{{ content.title }}</td>
-            <!-- <td>{{ content.target_id }}</td> -->
             <td>{{ content.mapping_url }}</td>
             <!-- <td>{{ content.recognition }}</td> -->
             <td>{{ content.open_from }} - {{ content.open_to }}</td>
-            <td>
-                {% if content.target_id %}
-                    <a href="{% url "content_edit" content.contract_no %}">
-                            編集
-                    </a>
-                {% else %}
-                    <a href="{% url "content_new" content.contract_no %}">
-                            登録
-                    </a>
-                {% endif %}
-            </td>
-            <td><a href="{% url "content_edit_open" content.contract_no %}">{{ content.is_open }}</a></td>
+
+            {% if content.target_id %}
+            <td class="tac nowrap"><button type="button" class="btn btn-small btn-primary" onclick="location.href='/content/edit/{{ content.contract_no }}'">編集</button></td>
+            {% else %}
+            <td class="tac nowrap"><button type="button" class="btn btn-small btn-warning" onclick="location.href='/content/edit/{{ content.contract_no }}'">登録</button></td>
+            {% endif %}
+
+            {% if content.is_open %}
+            <td class="tac nowrap"><button {% if not content.target_id %}disabled="disabled"{% endif %} type="button" onclick="location.href='/content/edit_open/{{ content.contract_no }}'" class="btn btn-small btn-success">公開中</button></td>
+            {% else %}
+                <td class="tac nowrap"><button {% if not content.target_id %}disabled="disabled"{% endif %} type="button" onclick="location.href='/content/edit_open/{{ content.contract_no }}'" class="btn btn-small btn-inverse">非公開</button></td>
+            {% endif %}
+
         </tr>
         {% endfor %}
     </table>

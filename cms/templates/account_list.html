@@ -1,7 +1,7 @@
 {% extends "base2.html" %}
 {% block title_html %}Account List{% endblock title_html %}
 {% block h1 %}アカウント一覧{% endblock h1 %}
-{% block button %}<button class="entryBtn btn btn-small" onclick="location.href='{% url "account_new" %}'">新規登録</button>{% endblock %}
+{% block button %}<button class="entryBtn btn btn-small btn-danger" onclick="location.href='{% url "account_new" %}'">新規登録</button>{% endblock %}
 {% block breadcrumb %}アカウント一覧{% endblock %}
 {% block article_content %}
     <br />
@@ -23,7 +23,22 @@
             <td>{{ acc.address }}</td>
             <td>{{ acc.email }}</td>
             <td>{{ acc.phone_number }}</td>
-            <td><a href="{% url "account_edit_status" acc.acc_type_id acc.user_id %}">{{ acc.user_running }}</a></td>
+            <td>
+                {% if acc.identifier == user.identifier %}
+                    Myself
+                {% elif acc.user_running %}
+                    <button type="button" onclick="location.href='/account/edit_status/{{ acc.acc_type_id }}/{{ acc.user_id }}'" class="btn btn-small btn-info">稼働中</button>
+                {% else %}
+                    <button type="button" onclick="location.href='/account/edit_status/{{ acc.acc_type_id }}/{{ acc.user_id }}'" class="btn btn-small btn-inverse">停止中</button>
+                {% endif %}
+                <!--
+                <a href="{% url "account_edit_status" acc.acc_type_id acc.user_id %}">{{ acc.user_running }}</a>
+                 -->
+            </td>
+
+
+
+
         </tr>
         {% endfor %}
     </table>
