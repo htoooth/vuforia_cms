@@ -48,7 +48,7 @@ def logout_view(request):
 
 
 class LoginForm(forms.Form):
-    user_id = forms.IntegerField(label="ユーザーID")
+    user_id = forms.IntegerField(label="ユーザーID", min_value=1)
     acc_type_id = forms.ChoiceField(label="アカウントタイプ",
                                   choices=UserProfile.ACC_TYPE_CHOICES)
     #identifier = forms.CharField(label="アカウント")

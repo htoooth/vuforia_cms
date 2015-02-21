@@ -60,7 +60,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     # Attributes
     identifier = models.CharField('アカウントID', max_length=11,
                                   unique=True)
-    user_id     = models.IntegerField('ユーザーID', null=True)
+    user_id     = models.PositiveIntegerField('ユーザーID', null=True)
     acc_type_id = models.SmallIntegerField('アカウントタイプID',
                                            choices=ACC_TYPE_CHOICES)
     # substitute password of User for this
