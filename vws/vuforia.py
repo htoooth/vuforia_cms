@@ -19,42 +19,32 @@ class VuforiaBaseError(Exception):
         self.result_code = response['result_code']
         self.exc = exc
 
-
 class VuforiaRequestQuotaReached(VuforiaBaseError):
     pass
-
 
 class VuforiaAuthenticationFailure(VuforiaBaseError):
     pass
 
-
 class VuforiaRequestTimeTooSkewed(VuforiaBaseError):
     pass
-
 
 class VuforiaTargetNameExist(VuforiaBaseError):
     pass
 
-
 class VuforiaUnknownTarget(VuforiaBaseError):
     pass
-
 
 class VuforiaBadImage(VuforiaBaseError):
     pass
 
-
 class VuforiaImageTooLarge(VuforiaBaseError):
     pass
-
 
 class VuforiaMetadataTooLarge(VuforiaBaseError):
     pass
 
-
 class VuforiaDateRangeError(VuforiaBaseError):
     pass
-
 
 class VuforiaFail(VuforiaBaseError):
     pass
