@@ -246,12 +246,12 @@ def edit(request, contractno):
                 error_message = res['result_code']
         else:
             return render(request, 'content_edit.html',
-                {'form': form, 'contractno': contractno,
+                {'form': form, 'contractno': contractno, 'content': i,
                  'company': company, 'error_message': error_message})
     else:
         form = ContentForm(instance=i)
     return render(request, 'content_edit.html',
-            {'form': form, 'contractno': contractno,
+            {'form': form, 'contractno': contractno, 'content': i,
              'company': company, 'error_message': error_message})
 
 

@@ -13,6 +13,10 @@
     <p>企業名: {{ company.enterprise }}</p>
     <p>CID: {{ company.user_id }}</p>
     <p>契約番号: {{ contractno }}</p>
+    {% load extras %}
+    <p class="cImg">
+        <img src='{{ MEDIA_URL }}/images300/{{ content.image.name|filename }}' />
+    </p>
     </div>
 
     <form method="post" action="{% url "content_edit" contractno %}" enctype="multipart/form-data" class="form-horizontal">
