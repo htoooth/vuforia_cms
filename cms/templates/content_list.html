@@ -19,22 +19,35 @@
         <tr>
             <td>{{ content.contract_no }}</td>
             <td>{{ content.company.user_id }}</td>
-            <td>{% if content.image %}<img src="{{ content.image.url }}" width="50" height="50">{% endif %}</td>
+            {% load extras %}
+            <td>
+                {% if content.image %}
+                    <img src="{{ MEDIA_URL }}/images100/{{ content.image.name|filename }}">
+                {% endif %}
+            </td>
             <td>{{ content.title }}</td>
             <td>{{ content.mapping_url }}</td>
             <!-- <td>{{ content.recognition }}</td> -->
             <td>{{ content.open_from }} - {{ content.open_to }}</td>
 
             {% if content.target_id %}
-            <td class="tac nowrap"><button type="button" class="btn btn-small btn-primary" onclick="location.href='/content/edit/{{ content.contract_no }}'">編集</button></td>
+                <td class="tac nowrap">
+                    <button type="button" class="btn btn-small btn-primary" onclick="location.href='/content/edit/{{ content.contract_no }}'">編集</button>
+                </td>
             {% else %}
-            <td class="tac nowrap"><button type="button" class="btn btn-small btn-warning" onclick="location.href='/content/new/{{ content.contract_no }}'">登録</button></td>
+                <td class="tac nowrap">
+                    <button type="button" class="btn btn-small btn-warning" onclick="location.href='/content/new/{{ content.contract_no }}'">登録</button>
+                </td>
             {% endif %}
 
             {% if content.is_open %}
-            <td class="tac nowrap"><button {% if not content.target_id %}disabled="disabled"{% endif %} type="button" onclick="location.href='/content/edit_open/{{ content.contract_no }}'" class="btn btn-small btn-success">公開中</button></td>
+                <td class="tac nowrap">
+                    <button {% if not content.target_id %}disabled="disabled"{% endif %} type="button" onclick="location.href='/content/edit_open/{{ content.contract_no }}'" class="btn btn-small btn-success">公開中</button>
+                </td>
             {% else %}
-                <td class="tac nowrap"><button {% if not content.target_id %}disabled="disabled"{% endif %} type="button" onclick="location.href='/content/edit_open/{{ content.contract_no }}'" class="btn btn-small btn-inverse">非公開</button></td>
+                <td class="tac nowrap">
+                    <button {% if not content.target_id %}disabled="disabled"{% endif %} type="button" onclick="location.href='/content/edit_open/{{ content.contract_no }}'" class="btn btn-small btn-inverse">非公開</button>
+                </td>
             {% endif %}
 
         </tr>
@@ -44,20 +57,26 @@
 
     <div class="pagination">
     <ul>
-        <li>{% if contents.has_previous %}
+        <li>
+            {% if contents.has_previous %}
                 <a href="?page={{ contents.previous_page_number }}">Previous</a>
             {% endif %}
         </li>
 
         {% for c in loop %}
             {% if forloop.counter == contents.number %}
-                <li class="active"><a href="#">{{ contents.number }}</a></li>
+                <li class="active">
+                    <a href="#">{{ contents.number }}</a>
+                </li>
             {% else %}
-            <li><a href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+                <li>
+                    <a href="?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                </li>
             {% endif %}
         {% endfor %}
 
-        <li>{% if contents.has_next %}
+        <li>
+            {% if contents.has_next %}
                 <a href="?page={{ contents.next_page_number }}">Next</a>
             {% endif %}
         </li>
