@@ -24,7 +24,7 @@ def create_thumbnail(content_instance, size):
 @receiver(post_save, sender=Content)
 def create_thumbnail_post_save(sender, instance, **kwargs):
     create_thumbnail(instance, 100)
-    create_thumbnail(instance, 500)
+    create_thumbnail(instance, 300)
 
 
 

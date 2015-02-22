@@ -176,7 +176,7 @@ def edit(request, contractno):
     old_file_path = os.path.join(settings.MEDIA_ROOT, i.image.name)
     old_file_path_100 = os.path.join(settings.MEDIA_ROOT, 'images100',
                                      os.path.split(i.image.name)[1])
-    old_file_path_500 = os.path.join(settings.MEDIA_ROOT, 'images500',
+    old_file_path_300 = os.path.join(settings.MEDIA_ROOT, 'images300',
                                      os.path.split(i.image.name)[1])
 
     company = i.company
@@ -229,7 +229,7 @@ def edit(request, contractno):
                 if old_file_name and (i.image.name != old_file_name):
                     os.remove(old_file_path)
                     os.remove(old_file_path_100)
-                    os.remove(old_file_path_500)
+                    os.remove(old_file_path_300)
 
                     #logging.basicConfig(
                     #        filename='/Users/js/Desktop/django.log',
