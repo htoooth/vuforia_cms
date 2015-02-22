@@ -3,6 +3,8 @@ from django.contrib import admin
 
 from django.conf import settings
 
+from cms import receivers
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'vuforia_cms.views.home', name='home'),
