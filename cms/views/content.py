@@ -174,6 +174,10 @@ def edit(request, contractno):
     old_file_name = i.image.name
     # その画像ファイルのパス
     old_file_path = os.path.join(settings.MEDIA_ROOT, i.image.name)
+    old_file_path_100 = os.path.join(settings.MEDIA_ROOT, 'images100',
+                                     os.path.split(i.image.name)[1])
+    old_file_path_500 = os.path.join(settings.MEDIA_ROOT, 'images500',
+                                     os.path.split(i.image.name)[1])
 
     company = i.company
     if request.POST:
@@ -219,10 +223,13 @@ def edit(request, contractno):
             if res['result_code'] == "Success":
                 new_content.save()
 
+                # TODO: この処理は他の機能を使ってもっとスッキリさせる。
                 # 新たな画像が送られてきたとき、
                 # 若しくはクリアが選択されたときは既存のファイルは削除する。
                 if old_file_name and (i.image.name != old_file_name):
                     os.remove(old_file_path)
+                    os.remove(old_file_path_100)
+                    os.remove(old_file_path_500)
 
                     #logging.basicConfig(
                     #        filename='/Users/js/Desktop/django.log',
