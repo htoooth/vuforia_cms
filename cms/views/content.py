@@ -15,6 +15,7 @@ from django.utils.safestring import mark_safe
 from django.utils.html import escape, conditional_escape
 from django.utils.encoding import force_text
 from django.forms.widgets import FileInput, Input, CheckboxInput
+from django.forms.extras.widgets import SelectDateWidget
 
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
                        Content
@@ -327,6 +328,9 @@ class ContentForm(forms.ModelForm):
                              widget=CustomFileInput(),
                              #allow_empty_file=True
                              )
+    #open_from = forms.DateField(label='公開開始日', required=True,
+    #                            widget=SelectDateWidget())
+
     #image = forms.ImageField(label='マーカー', required=False, widget=forms.FileInput)
     class Meta:
         model = Content
