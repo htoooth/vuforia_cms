@@ -224,6 +224,12 @@ class Vuforia(object):
         response = self._get_authenticated_response(req)
         return json.loads(response.content.decode())
 
+    def check_duplicates(self, target_id):
+        url = '%s/duplicates/%s' % (self.host, target_id)
+        req = requests.Request(method='GET', url=url)
+        response = self._get_authenticated_response(req)
+        return json.loads(response.content.decode())
+
 def main():
     v = Vuforia(access_key="44fb7f9c4ce4d05cddd29a79ed2cb41d56463a3f",
                 secret_key="5993b47b9ae0912e10ece2c98f59219867a01e42")
@@ -231,27 +237,28 @@ def main():
     for target in v.get_targets():
         print("TARGET: ")
         pprint(target)
+        print("DUPLICATES: ")
+        pprint(v.check_duplicates(target['target_id']))
 
-    image_file = open('/Users/js/Desktop/tiger.jpg', "rb")
-
+    #image_file = open('/Users/js/Desktop/tiger.jpg', "rb")
     # Python3では byte型になってしまうので、decode()する。
-    image = base64.b64encode(image_file.read()).decode('utf-8')
-    #print("image: ", type(image))
+    #image = base64.b64encode(image_file.read()).decode('utf-8')
+    #print("image: ", type(image))      # Python2
 
-    metadata_file = open('/Users/js/Desktop/vuforia_python/meta.txt', "rb")
-    metadata = base64.b64encode(metadata_file.read())
+    #metadata_file = open('/Users/js/Desktop/vuforia_python/meta.txt', "rb")
+    #metadata = base64.b64encode(metadata_file.read())
 
-    # caution: the type of width key is number instead of string.
-    pprint(v.add_target(
-        {"name": "tiger2", "width": 320, "image": image, "active_flag": 1}))
-    #print(v.add_target(
-    #           {"name": "tiger", "width": "320", "image": image,
-    #            "application_metadata": metadata, "active_flag": 1}))
+    # Caution: the type of width key is number instead of string.
+    #pprint(v.add_target(
+    #    {"name": "tiger2", "width": 320, "image": image, "active_flag": 1}))
 
-    pprint(v.delete_target("866cf0dcd1444123a3da3348acd6d00b"))
+
+    #pprint(v.delete_target("866cf0dcd1444123a3da3348acd6d00b"))
+
+    print("SUMMARY: ")
     pprint(v.get_summary())
-    pprint(v.update_target("43d88019ad64469c8e63e3bcb958a1d2",
-                           {"name": "tiger1"}))
+    #pprint(v.update_target("43d88019ad64469c8e63e3bcb958a1d2",
+    #                       {"name": "tiger1"}))
 
 if __name__ == "__main__":
     main()
