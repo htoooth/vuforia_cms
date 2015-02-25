@@ -274,6 +274,9 @@ def edit_open(request, contractno):
     data = {"active_flag": new_is_open}
     res = v.update_target(i.target_id, data)
 
+    # ここでVuforiaから認識率を取得する。
+    recognition = v.get_target_by_id(i.target_id)["tracking_rating"]
+
     # 公開にする場合は、Duplicatesも確認する。
     if new_is_open == 1:
         dup = v.check_duplicates(i.target_id)
@@ -281,6 +284,8 @@ def edit_open(request, contractno):
     # Vuforia APIで登録処理が成功したら続きの処理を行う。
     if res['result_code'] == "Success":
         i.is_open = new_is_open
+        # ここで認識率を保存する。
+        i.recognition = recognition
         i.save()
         # 公開にする場合は、JSONファイルのDUPLICATESキーを更新する。
         if new_is_open == 1:
