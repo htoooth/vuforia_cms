@@ -36,7 +36,7 @@
     <hr>
     {% if acctypeid == 3 %}
 
-        <h2>契約情報<a class="entryBtn btn btn-danger btn-small" href="{% url "contract_new" userid %}">新規契約</a></h2>
+    <h2>契約情報<a class="entryBtn btn btn-danger btn-small" href="{% if user.acc_type_id == 3 %}javascript:void(0){% else %}{% url "contract_new" userid %}{% endif %}" disabled="{% if user.acc_type_id == 3 %}disabled{% endif %}">新規契約</a></h2>
         {% if cont_list %}
             <table class="table table-list table-striped table-bordered table-condensed">
                 <tr>
@@ -50,12 +50,12 @@
                     <td>{{ cont.open_to }}</td>
                     <td>{% if cont.image %}<img src="{{ cont.image.url }}" width="50" height="50">{% endif %}</td>
 
-                    <td class="tac nowrap"><button  type="button" class="btn btn-small btn-primary" onclick="location.href='/contract/edit/{{ cont.contract_no }}'">契約編集</button></td>
+                    <td class="tac nowrap"><button  type="button" class="btn btn-small btn-primary" {% if user.acc_type_id == 3 %}disabled="disabled"{% else %}onclick="location.href='/contract/edit/{{ cont.contract_no }}'"{% endif %}>契約編集</button></td>
 
                     {% if cont.target_id %}
-                        <td class="tac nowrap"><button type="button" class="btn btn-small btn-info" onclick="location.href='/content/edit/{{ cont.contract_no }}'">画像編集</button>
+                    <td class="tac nowrap"><button type="button" class="btn btn-small btn-info" {% if user.acc_type_id == 3 %}disabled="disabled"{% else %}onclick="location.href='/content/edit/{{ cont.contract_no }}'"{% endif %}>画像編集</button>
                     {% else %}
-                        <td class="tac nowrap"><button type="button" class="btn btn-small btn-warning" onclick="location.href='/content/new/{{ cont.contract_no }}'">画像登録</button>
+                    <td class="tac nowrap"><button type="button" class="btn btn-small btn-warning" {% if user.acc_type_id == 3 %}disabled="disabled"{% else %}onclick="location.href='/content/new/{{ cont.contract_no }}'"{% endif %}>画像登録</button>
                     {% endif %}
 
                 </tr>

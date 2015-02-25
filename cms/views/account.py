@@ -134,7 +134,7 @@ def edit(request, acctypeid, userid):
                 company__exact=company,
                 company__parent_agency_id__exact=request.user.user_id)
         else:
-            cont_list = None
+            cont_list = Content.objects.filter(company__exact=company)
     else:
         cont_list = None
 
