@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django import forms
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout, \
                                 update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
@@ -13,6 +14,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
                        Content
+from vws import vuforia
+
+import os, json
 
 NOT_ADMIN_CHOICES = ((3, 'Company'),)
 PW_MIN_LENGTH = 8
@@ -148,14 +152,31 @@ def edit_status(request, acctypeid, userid):
 
     perm = Permission.objects.get(codename='running')
 
-    if i.user_running == 1:
-        i.user_running = 0
-        i.user_permissions.remove(perm)
-    else:
+    if i.user_running == 0:
         i.user_running = 1
         i.user_permissions.add(perm)
+    else:
+        i.user_running = 0
+        i.user_permissions.remove(perm)
+
+        # Companyを停止した場合は、その全てのマーカーを非公開にする。
+        if i.acc_type_id == 3:
+            key_path = os.path.join(settings.BASE_DIR, '../accesskey.json')
+            with open(key_path, "r", encoding="utf-8") as key_fp:
+                key_dict = json.load(key_fp)
+            v = vuforia.Vuforia(access_key=key_dict["ACCESS_KEY"],
+                                secret_key=key_dict["SECRET_KEY"])
+            contents = Content.objects.filter(company__exact=i)
+            data = {"active_flag": 0}
+            for c in contents:
+                res = v.update_target(c.target_id, data)
+                # Vuforia APIで登録処理が成功したら続きの処理を行う。
+                if res['result_code'] == "Success":
+                    c.is_open = 0
+                    c.save()
     i.save()
     return redirect('/account/list')
+
 
 @transaction.atomic
 @login_required
