@@ -137,8 +137,6 @@ def new(request, contractno):
             create_json(contractno, title, open_from, open_to,
                         mapping_url, [])
 
-            # 画像サムネイルを作る。
-
             # フォームのデータをDBに仮保存する。
             new_content = form.save(commit=False)
 
@@ -217,8 +215,6 @@ def edit(request, contractno):
             # JSONファイルを作る。
             create_json(contractno, title, open_from, open_to,
                         mapping_url)
-
-            # 画像サムネイルを作る。
 
             # フォームのデータをDBに保存する。
             new_content = form.save(commit=False)
