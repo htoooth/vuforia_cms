@@ -25,7 +25,7 @@ import os, json, logging, base64
 
 # TODO: 本来はメタデータは、JSONファイルのURL
 def create_metadata_dict(contractno, title,
-                         open_from, open_to, mapping_url):
+                         open_from, open_to, mapping_url, duplicates):
     """
     メタデータのPythonディクショナリーを生成する関数
     """
@@ -39,23 +39,28 @@ def create_metadata_dict(contractno, title,
         json_dict['OPEN_TO'] = None
     json_dict['TYPE'] = 'url'
     json_dict['URL'] = mapping_url
+    json_dict['DUPLICATES'] = duplicates
     return json_dict
 
-def create_metadata(contractno, title, open_from, open_to, mapping_url):
+def create_metadata(contractno, title, open_from, open_to, mapping_url,
+                    duplicates):
     """
     メタデータを作成する関数
     """
     metadata_dict = create_metadata_dict(contractno, title,
-                                         open_from, open_to, mapping_url)
+                                         open_from, open_to, mapping_url,
+                                         duplicates)
     metadata_json = json.dumps(metadata_dict, ensure_ascii=False)
     return base64.b64encode(metadata_json.encode()).decode()
 
-def create_json(contractno, title, open_from, open_to, mapping_url):
+def create_json(contractno, title, open_from, open_to, mapping_url,
+                duplicates):
     """
     メタデータのJSONファイルを作成・保存する関数
     """
     metadata_dict = create_metadata_dict(contractno, title,
-                                         open_from, open_to, mapping_url)
+                                         open_from, open_to, mapping_url,
+                                         duplicates)
     p = os.path.join(settings.BASE_DIR, 'cms/static/json',
                      contractno + '.json')
     with open(p, "w", encoding="utf-8") as json_fp:
@@ -126,11 +131,11 @@ def new(request, contractno):
                 image = base64.b64encode(
                         request.FILES['image'].read()).decode('utf-8')
             metadata = create_metadata(i.contract_no, title, open_from,
-                                       open_to, mapping_url)
+                                       open_to, mapping_url, [])
 
             # JSONファイルを作る。
             create_json(contractno, title, open_from, open_to,
-                        mapping_url)
+                        mapping_url, [])
 
             # 画像サムネイルを作る。
 
@@ -273,9 +278,25 @@ def edit_open(request, contractno):
     data = {"active_flag": new_is_open}
     res = v.update_target(i.target_id, data)
 
+    # 公開にする場合は、Duplicatesも確認する。
+    if new_is_open == 1:
+        dup = v.check_duplicates(i.target_id)
+
     # Vuforia APIで登録処理が成功したら続きの処理を行う。
     if res['result_code'] == "Success":
         i.is_open = new_is_open
+        i.save()
+        # 公開にする場合は、JSONファイルのDUPLICATESキーを更新する。
+        if new_is_open == 1:
+            # JSONファイルのDUPLICATESキーには自分も含める。
+            dup['similar_targets'].append(i.target_id)
+            create_json(contractno, i.title, i.open_from, i.open_to,
+                        i.mapping_url, dup['similar_targets'])
+            if dup['similar_targets']:
+                for t in dup['similar_targets']:
+                    c = Content.objects.get(target_id__exact=t)
+                    create_json(contractno, c.title, c.open_from, c.open_to,
+                                c.mapping_url, dup['similar_targets'])
         return redirect('/content/list')
     # Vuforiaのレスポンスが成功でない場合
     else:
