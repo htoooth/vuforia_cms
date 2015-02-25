@@ -356,8 +356,12 @@ class ContentForm(forms.ModelForm):
     #open_from = forms.DateField(label='公開開始日', required=True,
     #                            widget=SelectDateWidget())
 
-    #image = forms.ImageField(label='マーカー', required=False, widget=forms.FileInput)
     class Meta:
         model = Content
         fields = ('open_from', 'open_to', 'title', 'mapping_url', 'image',)
-
+        widgets = {
+            #'open_from': forms.DateInput(attrs={'data-datepicker':'datepicker'}),
+            #'open_to': forms.DateInput(attrs={'class':'datepicker'}),
+            'open_to': forms.DateInput(
+                                attrs={'data-datepicker':'datepicker'}),
+        }

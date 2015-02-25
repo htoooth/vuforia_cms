@@ -7,9 +7,20 @@
 <!-- for Apache Rewrite -->
 <base href="">
 <!-- Le styles -->
+
+<script src="{% static 'js/lib/jquery-1.11.1.js' %}"></script>
+<!--
+<link href="{% static "js/lib/jquery-ui-1.11.3/jquery-ui.css" %}" rel="stylesheet">
+<script src="{% static 'js/lib/jquery-ui-1.11.3/jquery-ui.min.js' %}"></script>
+<script src="{% static 'js/lib/jquery-ui-1.11.3/jquery-ui.js' %}"></script>
+<script src="{% static 'js/lib/jquery-ui-1.11.3/external/jquery/jquery.js' %}"></script>
+-->
 <link href="{% static "css/style.css" %}" rel="stylesheet">
 <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
 <link href="{% static "css/custom.css" %}" rel="stylesheet">
+
+<script type="text/javascript" src="{% static 'js/check_pixel.js' %}"></script>
+
 <!--<link href="{% static "css/bootstrap-responsive.css" %}" rel="stylesheet">-->
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -115,6 +126,7 @@
 $(function(){if($.browser.msie&&parseInt($.browser.version,10)===6){$('.row div[class^="span"]:last-child').addClass("last-child");$('[class*="span"]').addClass("margin-left-20");$(':button[class="btn"], :reset[class="btn"], :submit[class="btn"], input[type="button"]').addClass("button-reset");$(":checkbox").addClass("input-checkbox");$('[class^="icon-"], [class*=" icon-"]').addClass("icon-sprite");$(".pagination li:first-child a").addClass("pagination-first-child")}})
 
 </script>
+
 </body>
 </html>
 
