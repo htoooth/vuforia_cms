@@ -271,7 +271,6 @@ def edit_open(request, contractno):
     v = vuforia.Vuforia(access_key=key_dict["ACCESS_KEY"],
                         secret_key=key_dict["SECRET_KEY"])
     data = {"active_flag": new_is_open}
-    i.save()
     res = v.update_target(i.target_id, data)
 
     # Vuforia APIで登録処理が成功したら続きの処理を行う。
