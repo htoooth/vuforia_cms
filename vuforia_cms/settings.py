@@ -89,8 +89,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# 「TDD with Python」p.141より (デプロイ時に)
-STATIC_ROOT = os.path.join(BASE_DIR, '../static')
+# 「TDD with Python」p.141より (デプロイ時に変更する)
+STATIC_ROOT = os.path.join(BASE_DIR, 'cms/static')
 
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'cms/media')
 # 「TDD with Python」p.141より (デプロイ時に)
@@ -108,6 +108,7 @@ LOGIN_URL = 'login'
 #SESSION_COOKIE_SECURE = True
 #CSRF_COOKIE_SECURE = True
 #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
+
 
 LOGGING = {
     'version': 1,
