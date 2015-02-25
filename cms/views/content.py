@@ -184,6 +184,10 @@ def edit(request, contractno):
                                      os.path.split(i.image.name)[1])
 
     company = i.company
+    with open(os.path.join(settings.STATIC_ROOT, 'json',
+                           str(i.contract_no) + '.json')) as json_fp:
+        dup = json.load(json_fp)['DUPLICATES']
+
     if request.POST:
         form = ContentForm(request.POST, request.FILES, instance=i)
         if form.is_valid():
@@ -193,7 +197,7 @@ def edit(request, contractno):
             mapping_url = form.cleaned_data['mapping_url']
 
             metadata = create_metadata(i.contract_no, title, open_from,
-                                       open_to, mapping_url)
+                                       open_to, mapping_url, dup)
             print(metadata)
 
             # Vuforiaへの登録処理
@@ -214,7 +218,7 @@ def edit(request, contractno):
 
             # JSONファイルを作る。
             create_json(contractno, title, open_from, open_to,
-                        mapping_url)
+                        mapping_url, dup)
 
             # フォームのデータをDBに保存する。
             new_content = form.save(commit=False)
