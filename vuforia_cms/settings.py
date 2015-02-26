@@ -109,6 +109,14 @@ LOGIN_URL = 'login'
 #CSRF_COOKIE_SECURE = True
 #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
 
+DATE_INPUT_FORMATS = [
+    '%Y-%m-%d','%m/%d/%Y', '%m/%d/%y', # '2006-10-25', '10/25/2006', '10/25/06'
+    '%Y/%m/%d', # '2006/10/25'(デフォルトではない)
+    '%b %d %Y', '%b %d, %Y', # 'Oct 25 2006', 'Oct 25, 2006'
+    '%d %b %Y', '%d %b, %Y', # '25 Oct 2006', '25 Oct, 2006'
+    '%B %d %Y', '%B %d, %Y', # 'October 25 2006', 'October 25, 2006'
+    '%d %B %Y', '%d %B, %Y', # '25 October 2006', '25 October, 2006'
+]
 
 LOGGING = {
     'version': 1,
