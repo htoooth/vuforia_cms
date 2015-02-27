@@ -15,7 +15,7 @@ from cms.utils.decorators import my_permission_required
 from cms.forms import CustomFileInput, ContentForm
 from vws import vuforia
 
-import os, json, logging, base64
+import os, json, logging, base64, fcntl
 
 # TODO: 本来はメタデータは、JSONファイルのURL
 def create_metadata_dict(contractno, title,
@@ -58,7 +58,12 @@ def create_json(contractno, title, open_from, open_to, mapping_url,
     p = os.path.join(settings.BASE_DIR, 'cms/static/json',
                      str(contractno) + '.json')
     with open(p, "w", encoding="utf-8") as json_fp:
-        json.dump(metadata_dict, json_fp, ensure_ascii=False)
+        fcntl.flock(json_fp.fileno(), fcntl.LOCK_EX)
+        try:
+            json.dump(metadata_dict, json_fp, ensure_ascii=False)
+        finally:
+            fcntl.flock(json_fp.fileno(), fcntl.LOCK_UN)
+
 
 @login_required
 @my_permission_required('cms.running', raise_exception=True)
