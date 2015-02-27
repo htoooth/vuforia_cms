@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, \
                                        BaseUserManager
 from django.core.validators import RegexValidator
 from django.utils import timezone
+from django.contrib.auth.models import Permission
 
 import hashlib
 import os.path
@@ -99,6 +100,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
         self.updated_at = date.today()
+
         if self.id: # アップデートの場合
             super(UserProfile, self).save()
         else:       # 新規登録の場合は、関連モデルも登録する。
@@ -117,6 +119,10 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
             super(UserProfile, self).save()
             user.user_profile_id=self.id
             user.save()
+            # Adminは作成時にパーミッションを入れておく。
+            if self.acc_type_id == 1:
+                perm = Permission.objects.get(codename='running')
+                self.user_permissions.add(perm)
 
     def delete(self, **kwargs):
         if self.acc_type_id == 1:
