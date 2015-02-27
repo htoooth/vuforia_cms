@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
+import os, json
 #BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # from "TDD with Python"
 BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
@@ -59,12 +59,27 @@ WSGI_APPLICATION = 'vuforia_cms.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
+key_path = os.path.join(BASE_DIR, '../accesskey.json')
+with open(key_path, "r", encoding="utf-8") as key_fp:
+    key_dict = json.load(key_fp)
+MYSQL_PW = key_dict['MYSQL_PW']
 DATABASES = {
+    #'default': {
+    #    'ENGINE': 'django.db.backends.sqlite3',
+    #    #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    #    # 「TDD with Python」p.141より (デプロイ時に)
+    #    'NAME': os.path.join(BASE_DIR, '../database/db.sqlite3'),
+    #}
+
+    # MySQLを使う場合。
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        # 「TDD with Python」p.141より (デプロイ時に)
-        'NAME': os.path.join(BASE_DIR, '../database/db.sqlite3'),
+        # $ pip install mysql-connector-python --allow-external \
+        # mysql-connector-python
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'vuforia_cms',
+        'USER': 'test',
+        'PASSWORD': MYSQL_PW,
+        'HOST': '',
     }
 }
 
