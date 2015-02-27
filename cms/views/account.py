@@ -27,10 +27,11 @@ PW_MIN_LENGTH = 8
 def list(request):
     # ログインしているユーザー所有のアカウントをすべて取得する。
     if request.user.acc_type_id == 1:
-        acc_list = UserProfile.objects.filter(
-            Q(identifier=request.user.identifier) |
-            Q(parent_admin_id__exact=request.user.user_id)
-        ).order_by('acc_type_id')
+        acc_list = UserProfile.objects.all().order_by('acc_type_id')
+        #acc_list = UserProfile.objects.filter(
+        #    Q(identifier=request.user.identifier) |
+        #    Q(parent_admin_id__exact=request.user.user_id)
+        #).order_by('acc_type_id')
     elif request.user.acc_type_id == 2:
         acc_list = UserProfile.objects.filter(
             Q(identifier=request.user.identifier) |
