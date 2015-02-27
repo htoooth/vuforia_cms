@@ -1,10 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django import forms
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser
+from cms.forms import Form_connection, LoginForm
 
 # cf. 「Django完全解説」p.278、「TDD with Python」p.245
 #     「Django Essentials」No.1396
@@ -46,15 +46,6 @@ def logout_view(request):
     return redirect('/')
     #return HttpResponse("ログアウト")
 
-
-class LoginForm(forms.Form):
-    user_id = forms.IntegerField(label="ユーザーID", min_value=1)
-    acc_type_id = forms.ChoiceField(label="アカウントタイプ",
-                                  choices=UserProfile.ACC_TYPE_CHOICES)
-    #identifier = forms.CharField(label="アカウント")
-    password = forms.CharField(label="パスワード",
-                               widget=forms.PasswordInput)
-
 def page(request):
     if request.POST:
         form = Form_connection(request.POST)
@@ -76,15 +67,3 @@ def page(request):
                   'en/public/connection.html',
                   {'form': form})
 
-class Form_connection(forms.Form):
-    username = forms.CharField(label="Login")
-    password = forms.CharField(label="Password",
-                               widget=forms.PasswordInput)
-
-    def clean(self):
-        cleaned_data = super(Form_connection, self).clean()
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-        if not authenticate(username=username, password=password):
-            raise forms.ValidationError("Wrong login or password")
-        return self.cleaned_data

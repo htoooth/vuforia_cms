@@ -15,6 +15,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
                        Content
+from cms.forms import (UserProfileForm, CreateUserProfileForm,
+                       ValidatingPasswordChangeForm)
 from vws import vuforia
 
 import os, json
@@ -219,44 +221,3 @@ def edit_pw(request, acctypeid, userid):
                   {'form': form,
                    'acctypeid': int(acctypeid), 'userid': int(userid)})
 
-
-class UserProfileForm(forms.ModelForm):
-    class Meta:
-        model = UserProfile
-        fields = ('acc_type_id', 'enterprise', 'person', 'address',
-                  'email','phone_number',)
-
-class CreateUserProfileForm(forms.ModelForm):
-    class Meta:
-        model = UserProfile
-        fields = ('acc_type_id', 'enterprise', 'person', 'address',
-                  'email','phone_number', 'password',)
-        widgets = {'password': forms.PasswordInput(),}
-
-    def clean_password(self):
-        password = self.cleaned_data.get('password')
-        # At least PW_MIN_LENGTH long
-        if len(password) < PW_MIN_LENGTH:
-            raise forms.ValidationError(
-                "The new password must be at least %d characters long." % PW_MIN_LENGTH)
-        # At least one letter and one non-letter
-        first_isalpha = password[0].isalpha()
-        if all(c.isalpha() == first_isalpha for c in password):
-            raise forms.ValidationError(
-                "The new password must contain at least one letter and at least one digit or punctuation character.")
-        return password
-
-
-class ValidatingPasswordChangeForm(PasswordChangeForm):
-    def clean_new_password1(self):
-        password1 = self.cleaned_data.get('new_password1')
-        # At least PW_MIN_LENGTH long
-        if len(password1) < PW_MIN_LENGTH:
-            raise forms.ValidationError(
-                "The new password must be at least %d characters long." % PW_MIN_LENGTH)
-        # At least one letter and one non-letter
-        first_isalpha = password1[0].isalpha()
-        if all(c.isalpha() == first_isalpha for c in password1):
-            raise forms.ValidationError(
-                "The new password must contain at least one letter and at least one digit or punctuation character.")
-        return password1

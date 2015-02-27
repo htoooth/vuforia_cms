@@ -11,6 +11,7 @@ from django.db.models.query import Q
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
                        Content
 from cms.utils.decorators import my_permission_required
+from cms.forms import ContractForm
 
 NOT_ADMIN_CHOICES = ((3, 'Company'),)
 
@@ -51,8 +52,3 @@ def edit(request, contractno):
     else:
         return render(request, 'contract_edit.html', {'content': i})
 
-
-class ContractForm(forms.ModelForm):
-    class Meta:
-        model = Content
-        fields = ('contracted_at',)
