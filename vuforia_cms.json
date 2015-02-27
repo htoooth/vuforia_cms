@@ -1,0 +1,51 @@
+[
+    {
+        "model": "cms.userprofile",
+        "pk": 1,
+        "fields": {
+            "identifier": "ad-00000001",
+            "user_id": 1,
+            "acc_type_id": 1,
+            "user_running": 1,
+            "enterprise": "管理会社",
+            "person": "アドミン",
+            "address": "test_address",
+            "email": "test@example.com",
+            "phone_number": "080-1111-2222",
+            "password": "pbkdf2_sha256$12000$lb8hiaGasq68$yirkf5SsmqM/q0qwIBxKsaUeJQmPMTorNAdyrzxafbE="
+        }
+    },
+    {
+        "model": "cms.userprofile",
+        "pk": 2,
+        "fields": {
+            "identifier": "ag-00000001",
+            "user_id": 1,
+            "acc_type_id": 2,
+            "user_running": 0,
+            "enterprise": "2-1",
+            "person": "営業担当",
+            "address": "test_address",
+            "email": "test@example.com",
+            "phone_number": "080-1111-2222",
+            "password": "pbkdf2_sha256$12000$lb8hiaGasq68$yirkf5SsmqM/q0qwIBxKsaUeJQmPMTorNAdyrzxafbE="
+        }
+    },
+    {
+        "model": "cms.userprofile",
+        "pk": 3,
+        "fields": {
+            "identifier": "co-00000001",
+            "user_id": 1,
+            "acc_type_id": 3,
+            "user_running": 0,
+            "enterprise": "3-1",
+            "person": "お客様",
+            "address": "test_address",
+            "email": "test@example.com",
+            "phone_number": "080-1111-2222",
+            "password": "pbkdf2_sha256$12000$lb8hiaGasq68$yirkf5SsmqM/q0qwIBxKsaUeJQmPMTorNAdyrzxafbE="
+        }
+    }
+]
+
