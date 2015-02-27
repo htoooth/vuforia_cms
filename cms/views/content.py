@@ -56,7 +56,7 @@ def create_json(contractno, title, open_from, open_to, mapping_url,
                                          open_from, open_to, mapping_url,
                                          duplicates)
     p = os.path.join(settings.BASE_DIR, 'cms/static/json',
-                     contractno + '.json')
+                     str(contractno) + '.json')
     with open(p, "w", encoding="utf-8") as json_fp:
         json.dump(metadata_dict, json_fp, ensure_ascii=False)
 
@@ -289,13 +289,13 @@ def edit_open(request, contractno):
         if new_is_open == 1:
             # JSONファイルのDUPLICATESキーには自分も含める。
             dup['similar_targets'].append(i.target_id)
-            create_json(contractno, i.title, i.open_from, i.open_to,
-                        i.mapping_url, dup['similar_targets'])
+            # 重複している全てのマーカーのJSONファイルを書き換える。
             if dup['similar_targets']:
                 for t in dup['similar_targets']:
                     c = Content.objects.get(target_id__exact=t)
-                    create_json(contractno, c.title, c.open_from, c.open_to,
-                                c.mapping_url, dup['similar_targets'])
+                    create_json(c.contract_no, c.title, c.open_from,
+                                c.open_to, c.mapping_url,
+                                dup['similar_targets'])
         return redirect('/content/list')
     # Vuforiaのレスポンスが成功でない場合
     else:
