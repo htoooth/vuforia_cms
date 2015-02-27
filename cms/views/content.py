@@ -19,6 +19,7 @@ from django.forms.extras.widgets import SelectDateWidget
 
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
                        Content
+from cms.utils.decorators import my_permission_required
 from vws import vuforia
 
 import os, json, logging, base64
@@ -67,7 +68,7 @@ def create_json(contractno, title, open_from, open_to, mapping_url,
         json.dump(metadata_dict, json_fp, ensure_ascii=False)
 
 @login_required
-@permission_required('cms.running', raise_exception=True)
+@my_permission_required('cms.running', raise_exception=True)
 def list(request):
     # ログインしているユーザー所有のアカウントの持つ全コンテンツを渡す。
     if request.user.acc_type_id == 1:
@@ -102,7 +103,7 @@ def list(request):
 
 @transaction.atomic
 @login_required
-@permission_required('cms.running', raise_exception=True)
+@my_permission_required('cms.running', raise_exception=True)
 def new(request, contractno):
     error_message = ''
     # 既存のコンテンツインスタンス(契約)
@@ -169,7 +170,7 @@ def new(request, contractno):
 
 @transaction.atomic
 @login_required
-@permission_required('cms.running', raise_exception=True)
+@my_permission_required('cms.running', raise_exception=True)
 def edit(request, contractno):
     error_message = ''
     # 既存のコンテンツインスタンス(契約)
@@ -263,7 +264,7 @@ def edit(request, contractno):
 
 @transaction.atomic
 @login_required
-@permission_required('cms.running', raise_exception=True)
+@my_permission_required('cms.running', raise_exception=True)
 def edit_open(request, contractno):
     i = Content.objects.get(contract_no__exact=contractno)
     if   i.is_open == 1: new_is_open = 0

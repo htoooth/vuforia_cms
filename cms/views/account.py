@@ -8,6 +8,7 @@ from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.models import Permission
 from django.contrib.auth.decorators import login_required, \
                                            permission_required
+from cms.utils.decorators import my_permission_required
 from django.db import transaction
 from django.db.models.query import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -22,7 +23,7 @@ NOT_ADMIN_CHOICES = ((3, 'Company'),)
 PW_MIN_LENGTH = 8
 
 @login_required
-@permission_required('cms.running', raise_exception=True)
+@my_permission_required('cms.running', raise_exception=True)
 def list(request):
     # ログインしているユーザー所有のアカウントをすべて取得する。
     if request.user.acc_type_id == 1:
@@ -55,7 +56,7 @@ def list(request):
 
 @transaction.atomic
 @login_required
-@permission_required('cms.running', raise_exception=True)
+@my_permission_required('cms.running', raise_exception=True)
 def new(request):
     if request.user.acc_type_id != 3:
         if request.POST:
@@ -99,7 +100,7 @@ def new(request):
 
 @transaction.atomic
 @login_required
-@permission_required('cms.running', raise_exception=True)
+@my_permission_required('cms.running', raise_exception=True)
 def edit(request, acctypeid, userid):
     if request.POST:
         i = UserProfile.objects.get(acc_type_id=acctypeid,
@@ -145,7 +146,7 @@ def edit(request, acctypeid, userid):
 
 @transaction.atomic
 @login_required
-@permission_required('cms.running', raise_exception=True)
+@my_permission_required('cms.running', raise_exception=True)
 def edit_status(request, acctypeid, userid):
     i = UserProfile.objects.get(acc_type_id=acctypeid,
                                 user_id=userid)
@@ -180,7 +181,7 @@ def edit_status(request, acctypeid, userid):
 
 @transaction.atomic
 @login_required
-@permission_required('cms.running', raise_exception=True)
+@my_permission_required('cms.running', raise_exception=True)
 def edit_pw(request, acctypeid, userid):
     if request.POST:
         i = UserProfile.objects.get(acc_type_id=acctypeid,

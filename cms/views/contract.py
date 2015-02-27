@@ -10,12 +10,13 @@ from django.db.models.query import Q
 
 from cms.models import UserProfile, AdminUser, AgencyUser, CompanyUser, \
                        Content
+from cms.utils.decorators import my_permission_required
 
 NOT_ADMIN_CHOICES = ((3, 'Company'),)
 
 @transaction.atomic
 @login_required
-@permission_required('cms.running', raise_exception=True)
+@my_permission_required('cms.running', raise_exception=True)
 def new(request, companyid):
     if request.user.acc_type_id != 3:
         if request.POST:
@@ -41,7 +42,7 @@ def new(request, companyid):
 
 @transaction.atomic
 @login_required
-@permission_required('cms.running', raise_exception=True)
+@my_permission_required('cms.running', raise_exception=True)
 def edit(request, contractno):
     i = Content.objects.get(contract_no__exact=contractno)
     if request.POST:

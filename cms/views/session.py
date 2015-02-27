@@ -25,7 +25,7 @@ def login_view(request):
         # フォームの認証
         user = authenticate(identifier=identifier, password=password)
         if user is not None:
-            if user.has_perm('cms.running'):
+            if user.has_perm('cms.running') or user.acc_type_id == 1:
             #if user.is_active:
                 login(request, user)
                 #return render(request, 'login.html', {'form': form})
