@@ -173,7 +173,7 @@ def edit(request, contractno):
     error_message = ''
     # 既存のコンテンツインスタンス(契約)
     i = Content.objects.get(contract_no__exact=contractno)
-    # その画像ファイルの名前
+    # その画像ファイルの名前 ex. 'images/5.png'
     old_file_name = i.image.name
     # その画像ファイルのパス
     old_file_path = os.path.join(settings.MEDIA_ROOT, i.image.name)
@@ -231,7 +231,8 @@ def edit(request, contractno):
                 # TODO: この処理は他の機能を使ってもっとスッキリさせる。
                 # 新たな画像が送られてきたとき、
                 # 若しくはクリアが選択されたときは既存のファイルは削除する。
-                if old_file_name and (i.image.name != old_file_name):
+                # (編集処理で、かつ新しく保存した名前と前の名前が異なる時)
+                if old_file_name and (new_content.image.name != old_file_name):
                     os.remove(old_file_path)
                     os.remove(old_file_path_100)
                     os.remove(old_file_path_300)
