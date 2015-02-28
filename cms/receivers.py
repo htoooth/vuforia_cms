@@ -12,8 +12,9 @@ def create_thumbnail(content_instance, size):
     if content_instance.image:
         origin_path = content_instance.image.path
         new_path = os.path.join(settings.MEDIA_ROOT, 'images' + str(size),
-                       str(content_instance.contract_no) + os.path.splitext(
-                                            content_instance.image.name)[1])
+                    #str(content_instance.contract_no) + os.path.splitext(
+                    #                     content_instance.image.name)[1])
+                    os.path.split(content_instance.image.name)[1])
         # 画像ファイルを readモードで読み込み。
         img = Image.open(origin_path, 'r')
         # resizeではなくthumbnailを利用して縮小。上書きに注意。
