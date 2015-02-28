@@ -6,8 +6,21 @@
 {% block breadcrumb %}マーカー編集{% endblock %}
 {% block article_content %}
     {% if error_message %}
-    <h3 class="error">{{ error_message }}</h3>
+        <div class="alert alert-danger alert-dismissable">
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            <h4>{{ error_message }}</h4>
+        </div>
     {% endif %}
+
+    {% for field in form %}
+        {% if field.errors %}
+            <div class="alert alert-danger alert-dismissable">
+                <a class="close" data-dismiss="alert" href="#">&times;</a>
+                <h4>警告 !</h4>
+                <p>{{ field.errors }}</p>
+            </div>
+        {% endif %}
+    {% endfor %}
 
     <div style="text-align: center;">
     <p>企業名: {{ company.enterprise }}</p>
@@ -19,14 +32,21 @@
     </p>
     </div>
 
-    <form method="post" action="{% url "content_edit" contractno %}" enctype="multipart/form-data" class="form-horizontal">
+    <!-- <form method="post" action="{% url "content_edit" contractno %}" enctype="multipart/form-data" class="form-horizontal"> -->
+    <form method="post" action="{% url "content_edit" contractno %}" enctype="multipart/form-data">
         {% csrf_token %}
         <!-- This line inserts a CSRF token. -->
         <!-- <table class="table table-list table-striped table-bordered table-condensed"> -->
+
         <table align="center" class="table-list table-condensed">
-            {{ form.as_table }}
-            <!-- This line displays lines of the form. -->
+        {% for field in form %}
+            <tr>
+        <!-- <div align="center" class="fieldWrapper"> -->
+                <th>{{ field.label_tag }} {{ field.errors }}</th><td>{{ field }}</td>
+            </tr>
+        {% endfor %}
         </table>
+
         <div class="form-actions">
         <div class="tac">
         <button class="btn btn-primary btn-large" type="submit">更新</button>

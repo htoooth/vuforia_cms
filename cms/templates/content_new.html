@@ -18,11 +18,23 @@
     <form method="post" action="{% url "content_new" contractno %}" enctype="multipart/form-data" class="form-horizontal">
         {% csrf_token %}
         <!-- This line inserts a CSRF token. -->
+
+        <table align="center" class="table-list table-condensed">
+        {% for field in form %}
+            <tr>
+        <!-- <div align="center" class="fieldWrapper"> -->
+                <th>{{ field.label_tag }} {{ field.errors }}</th><td>{{ field }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+
         <!-- <table class="table table-list table-striped table-bordered table-condensed"> -->
+        <!--
         <table align="center" class="table-list table-condensed">
             {{ form.as_table }}
-            <!-- This line displays lines of the form. -->
         </table>
+         -->
+
         <div class="form-actions">
         <div class="tac">
         <button class="btn btn-primary btn-large" type="submit">登録</button>

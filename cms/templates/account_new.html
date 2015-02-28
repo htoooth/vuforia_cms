@@ -8,10 +8,33 @@
     <form method="post" action="{% url "account_new" %}" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         <!-- This line inserts a CSRF token. -->
+
+
+        <table align="center" class="table-list table-condensed">
+            {% for field in form %}
+                <tr>
+                    <!--
+                    {% if field.errors %}
+                        <div class="alert alert-danger alert-dismissable">
+                            <a class="close" data-dismiss="alert" href="#">&times;</a>
+                            <h4>警告 !</h4>
+                            <p>{{ field.errors }}</p>
+                        </div>
+                    {% endif %}
+                     -->
+                    <th>{{ field.label_tag }} {{ field.errors }}</th>
+                    <td>{{ field }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+
+        <!--
         <table align="center" class="table-list table-condensed">
             {{ form.as_table }}
-            <!-- This line displays lines of the form. -->
         </table>
+         -->
+
         <div class="form-actions">
             <div class="tac">
                 <button class="btn btn-primary btn-large" type="submit">登録する</button>
