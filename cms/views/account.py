@@ -42,7 +42,7 @@ def list(request):
     elif request.user.acc_type_id == 3:
         acc_list = UserProfile.objects.filter(identifier=request.user.identifier)
 
-    paginator = Paginator(acc_list, 2)
+    paginator = Paginator(acc_list, 5)
     page = request.GET.get('page')
     try:
         accs = paginator.page(page)

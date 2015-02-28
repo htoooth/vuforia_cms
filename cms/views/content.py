@@ -84,7 +84,7 @@ def list(request):
             company__user_id__exact=request.user.user_id
         )
 
-    paginator = Paginator(content_list, 2)
+    paginator = Paginator(content_list, 5)
     page = request.GET.get('page')
     try:
         contents = paginator.page(page)
