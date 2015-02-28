@@ -5,8 +5,11 @@ body {
 table {
     text-align: center;
 }
-.error {
+.error ul {
     color: red;
+}
+.error input, .error select {
+    border: 2px red solid;
 }
 /*
 tr.important td {

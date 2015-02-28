@@ -14,6 +14,7 @@ PW_MIN_LENGTH = 8
 
 
 class UserProfileForm(forms.ModelForm):
+    error_css_class = 'error'
     class Meta:
         model = UserProfile
         fields = ('acc_type_id', 'enterprise', 'person', 'address',
