@@ -21,6 +21,9 @@
         {% csrf_token %}
         <!-- This line inserts a CSRF token. -->
 
+        {% load staticfiles %}
+        <link href="{% static "css/style.css" %}" rel="stylesheet">
+
         <table align="center" class="table-list table-condensed">
             {% for field in form %}
                 <tr>
@@ -31,7 +34,7 @@
                             <p>{{ field.errors }}</p>
                         </div>
                     {% endif %}
-                    <th>{{ field.label_tag }} {{ field.errors }}</th><td>{{ field }}</td>
+                    <th>{{ field.label_tag }} </th><td>{{ field }} {{ field.errors }}</td>
                 </tr>
             {% endfor %}
         </table>
