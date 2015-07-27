@@ -55,7 +55,7 @@ def create_json(contractno, title, open_from, open_to, mapping_url,
     metadata_dict = create_metadata_dict(contractno, title,
                                          open_from, open_to, mapping_url,
                                          duplicates)
-    p = os.path.join(settings.BASE_DIR, 'cms/static/json',
+    p = os.path.join(settings.BASE_DIR, '../static/json',
                      str(contractno) + '.json')
     with open(p, "w", encoding="utf-8") as json_fp:
         fcntl.flock(json_fp.fileno(), fcntl.LOCK_EX)

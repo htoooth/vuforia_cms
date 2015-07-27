@@ -22,11 +22,11 @@ BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 SECRET_KEY = 'z)_b!(^542#an9lfvx=thzz_)l4hbj_#mrbe=4g*fscps0arw4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['marker.tengyan.space']
 
 
 # Application definition
@@ -64,23 +64,24 @@ with open(key_path, "r", encoding="utf-8") as key_fp:
     key_dict = json.load(key_fp)
 MYSQL_PW = key_dict['MYSQL_PW']
 DATABASES = {
-    #'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    #    # 「TDD with Python」p.141より (デプロイ時に)
-    #    'NAME': os.path.join(BASE_DIR, '../database/db.sqlite3'),
-    #}
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 「TDD with Python」p.141より (デプロイ時に)
+        'NAME': os.path.join(BASE_DIR, '../database/db.sqlite3'),
+    }
 
     # MySQLを使う場合。
-    'default': {
-        # $ pip install mysql-connector-python --allow-external \
-        # mysql-connector-python
-        'ENGINE': 'mysql.connector.django',
-        'NAME': 'vuforia_cms',
-        'USER': 'test',
-        'PASSWORD': MYSQL_PW,
-        'HOST': '',
-    }
+    #'default': {
+    #    # $ pip install mysql-connector-python --allow-external \
+    #    # mysql-connector-python
+    #    #'ENGINE': 'django.db.backends.mysql',
+    #    'ENGINE': 'mysql.connector.django',
+    #    'NAME': 'vuforia_cms',
+    #    'USER': 'test',
+    #    'PASSWORD': MYSQL_PW,
+    #    'HOST': '',
+    #}
 }
 
 # Internationalization
@@ -105,7 +106,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # 「TDD with Python」p.141より (デプロイ時に変更する)
-STATIC_ROOT = os.path.join(BASE_DIR, 'cms/static')
+STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'cms/media')
 # 「TDD with Python」p.141より (デプロイ時に)
@@ -120,9 +121,9 @@ AUTHENTICATION_BACKENDS = (
 LOGIN_URL = 'login'
 
 # SSL
-#SESSION_COOKIE_SECURE = True
-#CSRF_COOKIE_SECURE = True
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
 
 DATE_INPUT_FORMATS = [
     '%Y-%m-%d','%m/%d/%Y', '%m/%d/%y', # '2006-10-25', '10/25/2006', '10/25/06'
