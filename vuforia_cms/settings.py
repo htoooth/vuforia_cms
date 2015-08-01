@@ -26,7 +26,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['marker.tengyan.space']
+ALLOWED_HOSTS = ['marker-staging.tengyan.space']
 
 
 # Application definition
